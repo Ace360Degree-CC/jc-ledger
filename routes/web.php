@@ -20,8 +20,27 @@ Route::prefix('admin')->group(function () {
     Route::post('/register', [AdminAuthController::class, 'register']);
     Route::get('/login', [AdminAuthController::class, 'showLoginForm'])->name('admin.login');
     Route::post('/login', [AdminAuthController::class, 'login']);
+
     Route::get('/dashboard', [AdminAuthController::class, 'dashboard'])->middleware('auth:admin')->name('admin.dashboard');
+
     Route::post('/logout', [AdminAuthController::class, 'logout'])->name('admin.logout');
+
+    Route::get('/createSubadmin',[AdminAuthController::class, 'showcreateSubadmin'])->middleware('auth:admin')->name('admin.addSubadmin');
+    Route::post('/createSubadmin',[AdminAuthController::class, 'createSubadmin'])->middleware('auth:admin')->name('admin.addSubadmin');
+
+    Route::get('/editSubadmin/{id}', [AdminAuthController::class, 'editSubadmin'])->middleware('auth:admin')->name('subadmin.edit');
+
+    Route::post('/updateSubadmin',[AdminAuthController::class, 'updateSubadmin'])->middleware('auth:admin')->name('admin.updateSubadmin');
+
+    Route::post('/deleteSubadmin',[AdminAuthController::class, 'deleteSubadmin'])->middleware('auth:admin')->name('admin.deleteSubadmin');
+
+    Route::get('/subadmins', [AdminAuthController::class, 'showSubadminList'])->middleware('auth:admin')->middleware('auth:admin')->name('admin.allSubadmins');
+
+    Route::get('/myprofile', [AdminAuthController::class, 'showProfile'])->middleware('auth:admin')->name('admin.myprofile');
+
+    // Handle profile updates
+    Route::post('/admin/profile/update', [AdminAuthController::class, 'updateProfile'])->name('admin.updateProfile')->middleware('auth:admin');
+
 });
 
 // For SubAdmin Auth

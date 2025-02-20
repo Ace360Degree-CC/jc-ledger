@@ -9,7 +9,7 @@ class Subadmin extends Authenticatable
 {
     protected $table = 'subadmin';
     protected $guard = 'subadmin';
-    protected $fillable = ['name', 'email', 'password','username','status'];
+    protected $fillable = ['name', 'email', 'password','username','profile','status'];
     protected $hidden = ['password'];
 }
 
