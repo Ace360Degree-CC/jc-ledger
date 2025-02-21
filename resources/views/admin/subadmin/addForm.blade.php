@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>JC |Admin</title>
+    <title>JC | Admin</title>
 </head>
 <body>
     <h2>Create Subadmin</h2>
