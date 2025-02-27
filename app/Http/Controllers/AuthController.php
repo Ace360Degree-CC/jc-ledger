@@ -5,10 +5,63 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use App\Models\User;
 
 class AuthController extends Controller
 {
+
+    public function showProfile()
+{
+    $crntUserID = Auth::guard('web')->user()->id;
+    $myProfile = User::findOrFail($crntUserID);
+    //print_r($myProfile['profile']);exit;
+    return view('auth.profile', compact('myProfile'));
+}
+
+public function updateProfile(Request $request)
+{
+    $user = Auth::guard('web')->user();
+
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|email|unique:users,email,' . $user->id,
+        'password' => 'nullable|min:6',
+        'profile' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
+    ]);
+
+    // Update name & email
+    $user->name = $request->name;
+    $user->email = $request->email;
+
+    // Update password if provided
+    if ($request->filled('password')) {
+        $user->password = Hash::make($request->password);
+    }
+
+    // Update profile image if uploaded
+    if ($request->hasFile('profile')) {
+        // Delete old image if exists
+        if ($user->profile) {
+            Storage::disk('public')->delete('csp/profile/' . $user->profile);
+        }
+
+        // Store new image
+        $image = $request->file('profile');
+        $imageName = time() . '.' . $image->extension();
+        $image->storeAs('csp/profile', $imageName, 'public');
+
+
+        // Save the image name in the database
+        $user->profile = $imageName;
+    }
+
+    $user->save();
+
+    return redirect()->route('auth.profile')->with('success', 'Profile updated successfully!');
+}
+
+
     // Show registration form
     public function showRegisterForm()
     {

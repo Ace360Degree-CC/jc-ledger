@@ -14,6 +14,10 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::get('/dashboard', [AuthController::class, 'dashboard'])->middleware('auth')->name('dashboard');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
+Route::get('/profile', [AuthController::class, 'showProfile'])->name('auth.profile');
+Route::post('/profile/update', [AuthController::class, 'updateProfile'])->name('auth.profile.update');
+
+
 //FOR ADMIN AUTH
 Route::prefix('admin')->group(function () {
     Route::get('/register', [AdminAuthController::class, 'showRegisterForm'])->name('admin.register');
@@ -40,6 +44,21 @@ Route::prefix('admin')->group(function () {
 
     // Handle profile updates
     Route::post('/admin/profile/update', [AdminAuthController::class, 'updateProfile'])->name('admin.updateProfile')->middleware('auth:admin');
+
+
+    // Handle csp agents
+    Route::get('/registerCSP',[AdminAuthController::class, 'showRegisterFormCSP'])->middleware('auth:admin')->name('admin.addCSP');
+    Route::post('/registerCSP',[AdminAuthController::class, 'registerCSP'])->middleware('auth:admin')->name('admin.registerCSP');
+
+    Route::get('/csps', [AdminAuthController::class, 'showCSPList'])->middleware('auth:admin')->name('admin.csps');
+
+    Route::post('/deleteCSP',[AdminAuthController::class, 'deleteCSP'])->middleware('auth:admin')->name('admin.deleteCSP');
+
+
+    Route::get('/editCSP/{id}', [AdminAuthController::class, 'editCSP'])->middleware('auth:admin')->name('admin.editCSP');
+
+    Route::post('/updateCSP',[AdminAuthController::class, 'updateCSP'])->middleware('auth:admin')->name('admin.updateCSP');
+
 
 });
 

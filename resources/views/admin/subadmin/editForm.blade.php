@@ -11,7 +11,7 @@
         <input type="text" name="name" placeholder="Name" value="{{$subadmin->name}}" required>
         <input type="text" name="username" placeholder="Username" value="{{$subadmin->username}}" required>
         <input type="email" name="email" placeholder="Email" value="{{$subadmin->email}}" required>
-
+    
         <input type="password" name="password" placeholder="Password" >
 
         <input type="file" name="profile" />

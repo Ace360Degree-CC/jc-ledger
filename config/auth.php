@@ -78,7 +78,7 @@ return [
         ],
         'subadmin' => [
             'driver' => 'eloquent',
-            'model' => App\Models\subadmin::class,
+            'model' => App\Models\Subadmin::class,
         ]
 
         // 'users' => [
