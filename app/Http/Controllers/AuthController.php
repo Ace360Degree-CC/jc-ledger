@@ -81,6 +81,7 @@ public function updateProfile(Request $request)
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'status' => 0
         ]);
 
         return redirect()->route('login')->with('success', 'Registration successful! Please login.');
