@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\File;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminAuthController;
 use App\Http\Controllers\SubadminAuthController;
@@ -16,6 +17,17 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::get('/profile', [AuthController::class, 'showProfile'])->name('auth.profile');
 Route::post('/profile/update', [AuthController::class, 'updateProfile'])->name('auth.profile.update');
+
+
+Route::get('/assets/{file}', function ($file) {
+    $path = base_path('assets/' . $file);
+
+    if (!File::exists($path)) {
+        abort(404);
+    }
+
+    return Response::file($path);
+});
 
 
 //FOR ADMIN AUTH

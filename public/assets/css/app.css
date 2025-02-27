@@ -1,0 +1,61 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root{
+    --theme-color:#E85222;
+    --theme-color-dark:#ca3300;
+    --theme-dark:black;
+    --theme-dark-grey:rgb(68, 68, 68);
+}
+
+*{
+    transition: all 0.3s ease;
+}
+
+.text-theme{
+    color: var(--theme-color)!important;
+}
+
+
+.login-flex-box{
+    min-height: 100vh;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-box{
+    max-width: 550px;
+    width: 100%;
+    padding: 2rem;
+    border-radius: 1rem;
+    box-shadow: 0 0 2px var(--theme-dark);
+}
+
+
+/* Inputs and Buttons */
+input{
+    display: block;
+    width: 100%;
+    border: 1px solid var(--theme-dark-grey);
+    padding: 0.5rem 0.8rem;
+    border-radius: 0.4rem;
+}
+input:hover,input:focus,input:active{
+    outline: none;
+    border: 1px solid var(--theme-dark);
+}
+
+.btn-theme{
+    background: var(--theme-color);
+    padding: 0.5rem 0.8rem;
+    color: white;
+    cursor:pointer;
+    border-radius: 0.4rem;
+}
+
+.btn-theme:hover{
+    background-color: var(--theme-color-dark);
+}
