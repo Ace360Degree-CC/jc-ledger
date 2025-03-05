@@ -7,7 +7,13 @@
     --theme-color-dark:#ca3300;
     --theme-dark:black;
     --theme-dark-grey:rgb(68, 68, 68);
+    --sidebar-width:200px;
+    --navbar-height:60px;
 }
+
+
+
+
 
 *{
     transition: all 0.3s ease;
@@ -15,6 +21,30 @@
 
 .text-theme{
     color: var(--theme-color)!important;
+}
+
+
+
+.nav-theme{
+    position: fixed;
+    width: 100%;
+    left: 0;
+    top: 0;
+    height: var(--navbar-height);
+    background: black;
+}
+
+.sidebar-theme{
+    position: fixed;
+    top: calc(var(--navbar-height) + 10px);
+    left: 0;
+    width: var(--sidebar-width);
+    height: calc(100vh - var(--navbar-height) - 20px);
+    background: blue;
+}
+
+.page-content{
+    width: calc(100vw - var(--sidebar-width));
 }
 
 
