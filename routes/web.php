@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\File;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminAuthController;
 use App\Http\Controllers\SubadminAuthController;
+use App\Http\Controllers\ExcelController;
+use App\Http\Controllers\ExcelSchemaController;
 
 //FOR CSP AGENT AUTH
 Route::get('/', [AuthController::class, 'dashboard'])->middleware('auth');
@@ -71,6 +73,10 @@ Route::prefix('admin')->group(function () {
 
     Route::post('/updateCSP',[AdminAuthController::class, 'updateCSP'])->middleware('auth:admin')->name('admin.updateCSP');
 
+
+    //Handle Excel upload file in Admin Side
+    Route::get('/excel/upload', [ExcelSchemaController::class, 'showUploadForm'])->middleware('auth:admin')->name('excel.form');
+    Route::post('/excel/upload', [ExcelSchemaController::class, 'uploadExcel'])->middleware('auth:admin')->name('excel.upload');
 
 });
 
