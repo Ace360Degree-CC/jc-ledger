@@ -62,7 +62,7 @@ class ExcelSchemaController extends Controller
             DB::beginTransaction();
 
             // Clear existing data (optional)
-            DB::table('excel_data')->truncate();
+            //DB::table('excel_data')->truncate();
 
             // Generate a unique ID for this upload
             $uniqID = 'JCL' . time();
@@ -149,33 +149,33 @@ class ExcelSchemaController extends Controller
 
                     $batchData[] = $rowData;
                     $importedRowsCount++;
-
+                    
                     // 4e) Batch insert for performance
                     if (count($batchData) >= 100) {
                         DB::table('excel_data')->insert($batchData);
                         $batchData = [];
                     }
                 }  // end foreach
-
+                //print_r('Working here2');exit;
                 // Insert leftover rows in this chunk
                 if (!empty($batchData)) {
                     DB::table('excel_data')->insert($batchData);
                 }
-
+                //print_r("<pre>");print_r($batchData);exit;
                 // If we set $exitEarly to true, break the outer while loop
                 if ($exitEarly) {
                     // break;
 
                      // Insert log entry before redirecting
-                DB::table('excel_log')->insert([
-                    'uniqID' => $uniqID,
-                    'file' => $originalFilename,
-                    'month' => $monthYear,
-                    'uploadFrom' => 'Admin',
-                    'uploadedBy' => $crntAdminID,
-                    'created_at' => now(),
-                    'updated_at' => now()
-                ]);
+                // DB::table('excel_log')->insert([
+                //     'uniqID' => $uniqID,
+                //     'file' => $originalFilename,
+                //     'month' => $monthYear,
+                //     'uploadFrom' => 'Admin',
+                //     'uploadedBy' => $crntAdminID,
+                //     'created_at' => now(),
+                //     'updated_at' => now()
+                // ]);
 
                     // Pass the success message as a variable to the view:
                     return redirect()
@@ -207,31 +207,17 @@ class ExcelSchemaController extends Controller
             // If you want to differentiate, you can do:
             // if ($exitEarly) { ... } else { ... }
             return redirect()
-                ->back()
+            ->route('excel.form')
                 ->with('success', "Excel file processed successfully. Imported {$importedRowsCount} rows.");
         } catch (\Exception $e) {
             // If anything genuinely fails, it'll end up here
             DB::rollBack();
-            return redirect()->back()->with(
+            return redirect()->route('excel.form')->with(
                 'error',
                 'Error processing file: ' . $e->getMessage()
             );
         }
     }
 
-    /**
-     * Convert column index to Excel-like letter reference (A, B, C, ... AA, AB, etc.)
-     */
-    private function getColumnLetter($colIndex)
-    {
-        if ($colIndex < 26) {
-            // 0 -> A, 1 -> B, ... 25 -> Z
-            return chr(65 + $colIndex);
-        } else {
-            // 26 -> AA, 27 -> AB, ...
-            $firstLetter = chr(65 + floor($colIndex / 26) - 1);
-            $secondLetter = chr(65 + ($colIndex % 26));
-            return $firstLetter . $secondLetter;
-        }
-    }
+    
 }
