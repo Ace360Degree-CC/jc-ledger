@@ -10,7 +10,7 @@
     <div class="container mx-auto px-2">
             <div class="login-flex-box">
                 <div class="login-box">   
-                    <h2 class="text-center text-4xl font-semibold mb-5">Login</h2>
+                    <h2 class="text-center text-4xl font-semibold mb-5">Register</h2>
                     <form method="POST" action="{{ route('subadmin.register') }}">
                         @csrf
                         <input type="text" name="name" class="mb-4" placeholder="Name" required>
