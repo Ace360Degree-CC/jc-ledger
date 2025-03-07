@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Filters\ChunkReadFilter;  // Make sure this matches where you put the filter
-use App\Models\ExcelSchema;
 use App\Models\ExcelLog;
+use App\Models\ExcelSchema;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -26,14 +26,14 @@ class ExcelSchemaController extends Controller
             'month_year' => 'required|date_format:Y-m',
         ]);
 
-         // Get the month_year value
+        // Get the month_year value
         $monthYear = $request->input('month_year');
         $crntAdminID = Auth::guard('admin')->user()->id;
 
         // Get the uploaded file path
         $file = $request->file('excel_file');
         $originalFilename = $file->getClientOriginalName();
-        //print_r("<pre>");print_r($originalFilename);exit;
+        // print_r("<pre>");print_r($originalFilename);exit;
         $filePath = $file->getPathname();
 
         $storedPath = $file->storeAs('excel', $originalFilename, 'public');
@@ -59,10 +59,10 @@ class ExcelSchemaController extends Controller
             $importedRowsCount = 0;
 
             // Start DB transaction
-            DB::beginTransaction();
+            //DB::beginTransaction();
 
             // Clear existing data (optional)
-            //DB::table('excel_data')->truncate();
+            // DB::table('excel_data')->truncate();
 
             // Generate a unique ID for this upload
             $uniqID = 'JCL' . time();
@@ -125,8 +125,8 @@ class ExcelSchemaController extends Controller
                     // 4d) Build row data starting from column B (index 1)
                     $rowData = [
                         'uniqID' => $uniqID,
-                        'created_at' => now(),
-                        'updated_at' => now(),
+                        // 'created_at' => now(),
+                        // 'updated_at' => now(),
                     ];
 
                     // Loop from B (index 1) through DN (just like your original code)
@@ -149,33 +149,33 @@ class ExcelSchemaController extends Controller
 
                     $batchData[] = $rowData;
                     $importedRowsCount++;
-                    
+
                     // 4e) Batch insert for performance
                     if (count($batchData) >= 100) {
                         DB::table('excel_data')->insert($batchData);
                         $batchData = [];
                     }
                 }  // end foreach
-                //print_r('Working here2');exit;
+
                 // Insert leftover rows in this chunk
                 if (!empty($batchData)) {
                     DB::table('excel_data')->insert($batchData);
                 }
-                //print_r("<pre>");print_r($batchData);exit;
+
                 // If we set $exitEarly to true, break the outer while loop
                 if ($exitEarly) {
                     // break;
 
-                     // Insert log entry before redirecting
-                // DB::table('excel_log')->insert([
-                //     'uniqID' => $uniqID,
-                //     'file' => $originalFilename,
-                //     'month' => $monthYear,
-                //     'uploadFrom' => 'Admin',
-                //     'uploadedBy' => $crntAdminID,
-                //     'created_at' => now(),
-                //     'updated_at' => now()
-                // ]);
+                    // Insert log entry before redirecting
+                    DB::table('excel_log')->insert([
+                        'uniqID' => $uniqID,
+                        'file' => $originalFilename,
+                        'month' => $monthYear,
+                        'uploadFrom' => 'Admin',
+                        'uploadedBy' => $crntAdminID,
+                        'created_at' => now(),
+                        'updated_at' => now()
+                    ]);
 
                     // Pass the success message as a variable to the view:
                     return redirect()
@@ -187,37 +187,33 @@ class ExcelSchemaController extends Controller
                 $startRow += $chunkSize;
             }  // end while
 
-
-             // Log the upload in excel_log table
-        DB::table('excel_log')->insert([
-            'uniqID' => $uniqID,
-            'file' => $originalFilename,
-            'month' => $monthYear,
-            'uploadFrom' => 'Admin',
-            'uploadedBy' => $crntAdminID,
-            'created_at' => now(),
-            'updated_at' => now()
-        ]);
-
+            // Log the upload in excel_log table
+            DB::table('excel_log')->insert([
+                'uniqID' => $uniqID,
+                'file' => $originalFilename,
+                'month' => $monthYear,
+                'uploadFrom' => 'Admin',
+                'uploadedBy' => $crntAdminID,
+                'created_at' => now(),
+                'updated_at' => now()
+            ]);
 
             // Commit DB transaction
-            DB::commit();
+            //DB::commit();
 
             // Return success message (even if we exited early).
             // If you want to differentiate, you can do:
             // if ($exitEarly) { ... } else { ... }
             return redirect()
-            ->route('excel.form')
+                ->route('excel.form')
                 ->with('success', "Excel file processed successfully. Imported {$importedRowsCount} rows.");
         } catch (\Exception $e) {
             // If anything genuinely fails, it'll end up here
-            DB::rollBack();
+            // DB::rollBack();
             return redirect()->route('excel.form')->with(
                 'error',
                 'Error processing file: ' . $e->getMessage()
             );
         }
     }
-
-    
 }
