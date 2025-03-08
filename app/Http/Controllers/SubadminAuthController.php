@@ -14,7 +14,7 @@ class SubadminAuthController extends Controller
     }
 
     public function login(Request $request){
-        if(Auth::guard('subadmin')->attempt($request->only('username', 'password'))){
+        if(Auth::guard('subadmin')->attempt($request->only('email', 'password'))){
             return redirect()->route('subadmin.dashboard');
         }
 
