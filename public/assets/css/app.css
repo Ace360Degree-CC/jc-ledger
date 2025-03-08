@@ -7,11 +7,10 @@
     --theme-color-dark:#ca3300;
     --theme-dark:black;
     --theme-dark-grey:rgb(68, 68, 68);
-    --sidebar-width:200px;
+    --sidebar-width:80px;
+    --sidebar-width-expand:250px;
     --navbar-height:60px;
 }
-
-
 
 
 
@@ -37,18 +36,26 @@ body{
     box-shadow: inset 0px -1px 0 #e9e9e9;
 }
 
+.nav-theme.expanded{
+    width: calc(100% - var(--sidebar-width-expand));
+    left: var(--sidebar-width-expand);
+}
+
 .sidebar-theme{
     position: fixed;
     top: 0;
     left: 0;
-    width: var(--sidebar-width);
     height: 100vh;
     background: white;
     box-shadow: inset -1px 0px 0 #e9e9e9;
 }
 
 .sidebar-theme.collapsed{
-    width: 80px;
+    width: var(--sidebar-width);
+}
+
+.sidebar-theme.expanded{
+    width: var(--sidebar-width-expand);
 }
 
 .collapsed .side-brand span{
@@ -102,6 +109,10 @@ body{
     margin-bottom: 0.6rem;
 }
 
+.sidebar-theme.collapsed .menu-list-item{
+    text-align: center;
+}
+
 .menu-icon{
     padding: 0.4rem;
 }
@@ -110,8 +121,38 @@ body{
     padding: 0.5rem;
 }
 
+
 .dropdown-menu-list{
     padding-left: 40px;
+    display: none;
+}
+
+.menu-list-item.dropdown{
+    position: relative;
+}
+
+.menu-list-item.dropdown::after{
+    content: '\f107';
+    font-family: "FontAwesome";
+    position: absolute;
+    top: 0.4rem;
+    right: 0.8rem;
+    transform-origin: center;
+    transition: all 0.3s ease;
+}
+
+.menu-list-item.dropdown.expanded::after{
+    transform: rotate(180deg);
+}
+
+
+
+.menu-list-item.dropdown.expanded .dropdown-menu-list{
+    display: block;
+}
+
+.sidebar-theme.collapsed .dropdown-menu-list, .sidebar-theme.collapsed .menu-list-item.dropdown::after{
+    display: none !important;   
 }
 
 .dropdown-menu-list li{
@@ -126,8 +167,48 @@ body{
 }
 
 
-.page-content{
+.dp-img{
+    height:50px;
+    width:50px;
+
+}
+
+.profile-menu{
+    position: fixed;
+    top: var(--navbar-height);
+    right: 1rem;
+    padding: 1rem;
+    border-radius: 0.8rem;
+    max-width: 250px;
+    background: white;
+    border: 1px solid #e5e5e5;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(25px);
+    z-index: 500;
+}
+
+.profile-menu.show{
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: all;
+}
+
+.profile-items{
+    padding: 0.4rem 0.6rem;
+    width: 100%;
+    border-radius: 0.4rem;
+}
+
+
+
+.page-wrapper-theme{
     width: calc(100vw - var(--sidebar-width));
+    margin-top: var(--navbar-height);
+    margin-left: var(--sidebar-width);
+    padding: 1.2rem;
+    background: #efefef;
+    min-height: calc(100vh - var(--navbar-height));
 }
 
 

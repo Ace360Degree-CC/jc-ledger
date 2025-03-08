@@ -9,7 +9,7 @@
         <ul class="menu-list">
 
             <div class="menu-list-item">
-                <span class="menu-icon"><i class="fa-solid fa-chart-line"></i></span>
+                <span class="menu-icon"><i class="fa-solid fa-square-poll-vertical"></i></span>
                 <span class="menu-text">Dashboard</span>
             </div>
 
@@ -28,3 +28,6 @@
         </ul>
     </div>
 </div>
+
+<!-- Open Wrap  -->
+<div class="page-wrapper-theme">
