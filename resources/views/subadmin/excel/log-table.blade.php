@@ -11,15 +11,6 @@
 @include('admin.commons.header')
 
 @section('content')
-<<<<<<< HEAD:resources/views/excel/log-table.blade.php
-<div class="container mx-auto">
-
-        <h2 class="text-4xl text-center font-semibold">Excel Records</h2>
-
-   
-            <a href="{{ route('excel.form') }}">
-                <button class="btn-theme"><i class="fas fa-plus-circle"></i> Upload New Excel </button>
-=======
 <div class="container">
     <div class="row justify-content-between mb-4">
         <div class="col-md-6">
@@ -28,7 +19,6 @@
         <div class="col-md-6 text-right">
             <a href="{{ route('subadmin.excel.form') }}" class="btn btn-primary">
                 <i class="fas fa-plus-circle"></i> Upload New Excel
->>>>>>> b64353d2ac33adc81e578bf35605bfbf965ea6a2:resources/views/subadmin/excel/log-table.blade.php
             </a>
         
 
