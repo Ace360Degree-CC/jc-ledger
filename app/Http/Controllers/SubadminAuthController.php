@@ -17,7 +17,7 @@ class SubadminAuthController extends Controller
         if(Auth::guard('subadmin')->attempt($request->only('email', 'password'))){
             return redirect()->route('subadmin.dashboard');
         }
-
+ 
         return back()->withErrors(['email' => 'Invalid Credentials']);
 
     }
