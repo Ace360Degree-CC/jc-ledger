@@ -77,12 +77,12 @@ Route::prefix('admin')->group(function () {
 
 
     //Handle Excel upload file in Admin Side
-    Route::get('/excel/upload', [ExcelLogController::class, 'showUploadForm'])->middleware('auth:admin')->name('excel.form');
-    Route::post('/excel/upload', [ExcelLogController::class, 'uploadExcel'])->middleware('auth:admin')->name('excel.upload');
+    Route::get('/excel/upload', [ExcelLogController::class, 'showUploadForm'])->middleware('auth:admin')->name('admin.excel.form');
+    Route::post('/excel/upload', [ExcelLogController::class, 'uploadExcel'])->middleware('auth:admin')->name('admin.excel.upload');
 
     //Handle Excel Log in Admin Side
-    Route::get('/records', [ExcelLogController::class, 'index'])->middleware('auth:admin')->name('excel.logs');
-    Route::delete('/excel/logs/{id}', [ExcelLogController::class, 'deleteLog'])->middleware('auth:admin')->name('excel.delete');
+    Route::get('/records', [ExcelLogController::class, 'index'])->middleware('auth:admin')->name('admin.excel.logs');
+    Route::delete('/excel/logs/{id}', [ExcelLogController::class, 'deleteLog'])->middleware('auth:admin')->name('admin.excel.delete');
 
 });
 
@@ -96,12 +96,12 @@ Route::prefix('subadmin')->group(function () {
     Route::post('/logout', [SubadminAuthController::class, 'logout'])->name('subadmin.logout');
 
     //Handle Excel upload file in Subadmin Side
-    Route::get('/excel/upload', [SubAdminExcelLogController::class, 'showUploadForm'])->middleware('auth:subadmin')->name('excel.form');
-    Route::post('/excel/upload', [SubAdminExcelLogController::class, 'uploadExcel'])->middleware('auth:subadmin')->name('excel.upload');
+    Route::get('/excel/upload', [SubAdminExcelLogController::class, 'showUploadForm'])->middleware('auth:subadmin')->name('subadmin.excel.form');
+    Route::post('/excel/upload', [SubAdminExcelLogController::class, 'uploadExcel'])->middleware('auth:subadmin')->name('subadmin.excel.upload');
 
     //Handle Excel Log in Subadmin Side
-    Route::get('/records', [SubAdminExcelLogController::class, 'index'])->middleware('auth:subadmin')->name('excel.logs');
-    Route::delete('/excel/logs/{id}', [SubAdminExcelLogController::class, 'deleteLog'])->middleware('auth:subadmin')->name('excel.delete');
+    Route::get('/records', [SubAdminExcelLogController::class, 'index'])->middleware('auth:subadmin')->name('subadmin.excel.logs');
+    Route::delete('/excel/logs/{id}', [SubAdminExcelLogController::class, 'deleteLog'])->middleware('auth:subadmin')->name('subadmin.excel.delete');
 
 
 });
