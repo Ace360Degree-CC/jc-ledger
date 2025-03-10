@@ -16,7 +16,7 @@ class ExcelLogController extends Controller
 {
     public function showUploadForm()
     {
-        return view('excel/import-excel');
+        return view('admin/excel/import-excel');
     }
 
     public function index()
@@ -28,7 +28,7 @@ class ExcelLogController extends Controller
         }])->orderBy('created_at','DESC')->paginate(10);
         // print_r("<pre>");print_r($ExcelLogs);exit;
 
-        return view('excel.log-table', compact('ExcelLogs'));
+        return view('admin.excel.log-table', compact('ExcelLogs'));
     }
 
     /**
@@ -54,11 +54,11 @@ class ExcelLogController extends Controller
             $log->delete();
 
             return redirect()
-                ->route('excel.logs')
+                ->route('admin.excel.logs')
                 ->with('success', 'Record and associated data deleted successfully');
         } catch (\Exception $e) {
             return redirect()
-                ->route('excel.logs')
+                ->route('admin.excel.logs')
                 ->with('error', 'Error deleting record: ' . $e->getMessage());
         }
     }
@@ -239,7 +239,7 @@ class ExcelLogController extends Controller
 
                     // Pass the success message as a variable to the view:
                     return redirect()
-                        ->route('excel.logs')
+                        ->route('admin.excel.logs')
                         ->with('success', "Excel file processed successfully. Imported {$importedRowsCount} rows.");
                 }
 
@@ -265,12 +265,12 @@ class ExcelLogController extends Controller
             // If you want to differentiate, you can do:
             // if ($exitEarly) { ... } else { ... }
             return redirect()
-                ->route('excel.logs')
+                ->route('admin.excel.logs')
                 ->with('success', "Excel file processed successfully. Imported {$importedRowsCount} rows.");
         } catch (\Exception $e) {
             // If anything genuinely fails, it'll end up here
             // DB::rollBack();
-            return redirect()->route('excel.form')->with(
+            return redirect()->route('admin.excel.form')->with(
                 'error',
                 'Error processing file: ' . $e->getMessage()
             );

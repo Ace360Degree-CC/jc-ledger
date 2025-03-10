@@ -8,7 +8,7 @@
             <h2>Excel Upload Records</h2>
         </div>
         <div class="col-md-6 text-right">
-            <a href="{{ route('excel.form') }}" class="btn btn-primary">
+            <a href="{{ route('subadmin.excel.form') }}" class="btn btn-primary">
                 <i class="fas fa-plus-circle"></i> Upload New Excel
             </a>
         </div>
@@ -66,7 +66,7 @@
                                     </td>
                                     <td>
                                         @if(isset($log->id))
-                                            <form action="{{ route('excel.delete', $log->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this record?');">
+                                            <form action="{{ route('subadmin.excel.delete', $log->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this record?');">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="btn btn-sm btn-danger">
