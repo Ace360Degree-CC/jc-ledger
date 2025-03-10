@@ -34,7 +34,7 @@ class SubadminAuthController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'username' => 'required|string|max:10|unique:subadmin,username',
+            'username' => 'required|string|max:25|unique:subadmin,username',
             'email' => 'required|email|unique:subadmin,email',
             'password' => 'required|min:6|confirmed',
         ]);

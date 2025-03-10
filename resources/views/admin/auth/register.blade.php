@@ -13,6 +13,7 @@
                     <form method="POST" action="{{ route('admin.register') }}">
                         @csrf
                         <input type="text" name="name" class="mb-4" placeholder="Name" required>
+                        <input type="text" name="username" class="mb-4" placeholder="Username" required>
                         <input type="email" name="email" class="mb-4" placeholder="Email" required>
                         <input type="password" name="password" class="mb-4" placeholder="Password" required>
                         <input type="password" name="password_confirmation" class="mb-4" placeholder="Confirm Password" required>
@@ -22,7 +23,6 @@
                 </div> 
             </div>
         </div>
-
 
 </body>
 </html>

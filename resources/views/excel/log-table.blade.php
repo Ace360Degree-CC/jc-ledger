@@ -1,18 +1,25 @@
 <!-- resources/views/excel/log-table.blade.php -->
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Document</title>
+    @include('commons.headerlinks')
+</head>
+<body>
+    
+@include('admin.commons.header')
 
 @section('content')
-<div class="container">
-    <div class="row justify-content-between mb-4">
-        <div class="col-md-6">
-            <h2>Excel Upload Records</h2>
-        </div>
-        <div class="col-md-6 text-right">
-            <a href="{{ route('excel.form') }}" class="btn btn-primary">
-                <i class="fas fa-plus-circle"></i> Upload New Excel
+<div class="container mx-auto">
+
+        <h2 class="text-4xl text-center font-semibold">Excel Records</h2>
+
+   
+            <a href="{{ route('excel.form') }}">
+                <button class="btn-theme"><i class="fas fa-plus-circle"></i> Upload New Excel </button>
             </a>
-        </div>
-    </div>
+        
 
     @if (session('success'))
         <div class="alert alert-success">
@@ -26,11 +33,9 @@
         </div>
     @endif
 
-    <div class="card">
-        <div class="card-body">
-            <div class="table-responsive">
-                <table class="table table-striped">
-                    <thead>
+            <div class="table-auto w-full rounded-md p-3 bg-white mt-5">
+                <table class="table-auto w-full text-left">
+                    <thead class="border-b-1 border-gray-300">
                         <tr>
                             <th>Uploaded By</th>
                             <th>Upload From</th>
@@ -41,7 +46,7 @@
                     </thead>
                     <tbody>
                         @forelse ($ExcelLogs as $log)
-                            <tr>
+                            <tr class="py-3">
                                 <td>
                                 {{ $log->uploaderName }}
                                 </td>
@@ -82,7 +87,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="5" class="text-center">No records found</td>
+                                <td colspan="5" class="text-center py-3 font-normal text-xl" >No records found</td>
                             </tr>
                         @endforelse
                     </tbody>
@@ -91,6 +96,13 @@
                 <!-- Pagination if needed -->
                 {{ $ExcelLogs->links() }}
             </div>
-        </div>
-    </div>
+       
 </div>
+
+
+
+@include('commons.footer')
+
+
+</body>
+</html>
