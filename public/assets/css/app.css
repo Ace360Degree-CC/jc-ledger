@@ -211,6 +211,11 @@ body{
     min-height: calc(100vh - var(--navbar-height));
 }
 
+.page-wrapper-theme.collapsed{
+    width: calc(100vw - var(--sidebar-width-expand));
+    margin-left: var(--sidebar-width-expand);
+}
+
 
 .login-flex-box{
     min-height: 100vh;

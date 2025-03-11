@@ -7,14 +7,20 @@ const sideBarToggler = document.getElementById('sidebar-toggle');
 const sidebar = document.querySelector('.sidebar-theme');
 const navBar = document.querySelector('.nav-theme');
 const toggleIcon = document.querySelector('#toggle-icon');
+const PageWrapper  = document.querySelector('.page-wrapper-theme');
 
 sideBarToggler.addEventListener('click', ()=>{
     sidebar.classList.toggle('collapsed');
     sidebar.classList.toggle('expanded');
     navBar.classList.toggle('expanded');
+    PageWrapper.classList.toggle('collapsed');
     toggleIcon.classList.toggle('fa-expand');
     toggleIcon.classList.toggle('fa-compress');
 });
+
+
+
+
 
 
 const dropDownTrigger = document.querySelectorAll('.menu-list-item.dropdown');

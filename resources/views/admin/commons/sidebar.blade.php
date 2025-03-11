@@ -8,10 +8,10 @@
     <div class="menu-list-box">
         <ul class="menu-list">
 
-            <div class="menu-list-item">
+            <a href="{{route('admin.dashboard')}}"><div class="menu-list-item">
                 <span class="menu-icon"><i class="fa-solid fa-square-poll-vertical"></i></span>
                 <span class="menu-text">Dashboard</span>
-            </div>
+            </div></a>
 
             <div class="menu-list-item dropdown">
                 <span class="menu-icon"><i class="fa-solid fa-chart-line"></i></span>
@@ -24,6 +24,11 @@
                 </div>
 
             </div>
+
+            <a href="{{route('admin.excel.logs')}}"><div class="menu-list-item">
+                <span class="menu-icon"><i class="fa-solid fa-file-excel"></i></span>
+                <span class="menu-text">Records</span>
+            </div></a>
 
         </ul>
     </div>
