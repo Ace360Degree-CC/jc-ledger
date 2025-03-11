@@ -1,45 +1,39 @@
 <!-- resources/views/excel/log-table.blade.php -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    @include('commons.headerlinks')
+</head>
+<body>
+    
 
+
+@include('commons.header')
 
 @section('content')
-<div class="container">
-    <div class="row justify-content-between mb-4">
-        <div class="col-md-6">
-            <h2>Excel Upload Records Admin Side</h2>
-        </div>
-        <div class="col-md-6 text-right">
-            <a href="{{ route('admin.excel.form') }}" class="btn btn-primary">
-                <i class="fas fa-plus-circle"></i> Upload New Excel
-            </a>
-        </div>
-    </div>
 
-    @if (session('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
-        </div>
-    @endif
 
-    @if (session('error'))
-        <div class="alert alert-danger">
-            {{ session('error') }}
-        </div>
-    @endif
+<div class="container mx-auto">
+    <div class="bg-white p-4 rounded-md mb-3">
+        <h2 class="text-center text-2xl font-semibold mb-5">Excel Upload Records Admin Side</h2>
 
-    <div class="card">
-        <div class="card-body">
-            <div class="table-responsive">
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th>Uploaded By</th>
-                            <th>Upload From</th>
-                            <th>File</th>
-                            <th>Upload On</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
+        <a href="{{ route('admin.excel.form') }}" class="btn-theme">
+            <i class="fas fa-plus-circle"></i> Upload New Excel
+        </a>
+
+
+        <div class="border border-gray-300 mt-5 rounded-md">
+        <table class="w-full text-center ">
+            <thead class="p-4 border-b-2 border-gray-200">
+                <tr class="">
+                    <th>Uploaded By</th>
+                    <th>Upload From</th>
+                    <th>File</th>
+                    <th>Upload On</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
                         @forelse ($ExcelLogs as $log)
                             <tr>
                                 <td>
@@ -51,7 +45,7 @@
                                 <td>
                                         @if(isset($log->file) && !empty($log->file))
                                             <a href="{{ asset('storage/excel/' . $log->file) }}" target="_blank">
-                                                {{ $log->file }}
+                                            <i class="fa-solid fa-file-arrow-down text-2xl"></i>
                                             </a>
                                         @else
                                             <span class="text-muted">No file</span>
@@ -66,11 +60,11 @@
                                     </td>
                                     <td>
                                         @if(isset($log->id))
-                                            <form action="{{ route('admin.excel.delete', $log->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this record?');">
+                                            <form class="delete-file"  data-action="{{ route('admin.excel.delete', $log->id) }}" method="POST">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="btn btn-sm btn-danger">
-                                                    <i class="fas fa-trash"></i> Delete
+                                                    <i class="fas fa-trash text-red-700 text-2xl cursor-pointer"></i>
                                                 </button>
                                             </form>
                                         @else
@@ -86,11 +80,64 @@
                             </tr>
                         @endforelse
                     </tbody>
-                </table>
-
-                <!-- Pagination if needed -->
-                {{ $ExcelLogs->links() }}
-            </div>
-        </div>
+        </table>
     </div>
+
+    
 </div>
+{{ $ExcelLogs->links() }}
+</div>
+
+
+@include('commons.footer')
+
+<script>
+    $(document).ready(function(){
+
+        function deleteContent(url,formData){
+            $.ajax({
+                type:'post',
+                url:url,
+                data:formData,
+                processData:false,
+                contentType:false,
+                cache:false,
+                success:function(res){
+                    Swal.fire("File Deleted!", "", "success");
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 1500);
+                },
+                error:function(err){
+                    Swal.fire("Something went wrong!", "Something went wrong. Please try again.", "error");
+                }
+            })
+        }
+
+
+        $('.delete-file').submit(function(e){
+            e.preventDefault();
+            let url = $(this).data('action');
+            let formData = new FormData(this);
+            
+            Swal.fire({
+                icon:'error',
+                title: "Are You sure you want to Delete current File?",
+                showCancelButton: true,
+                confirmButtonText: "Delete",
+                }).then((result) => {
+                /* Read more about isConfirmed, isDenied below */
+                if (result.isConfirmed) {
+                    deleteContent(url,formData);
+                } else if (result.isDenied) {
+                    Swal.fire("Changes are not saved", "", "info");
+                }
+                });
+
+
+        })
+    })
+</script>
+
+</body>
+</html>

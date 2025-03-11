@@ -238,9 +238,10 @@ class ExcelLogController extends Controller
                     ]);
 
                     // Pass the success message as a variable to the view:
-                    return redirect()
-                        ->route('admin.excel.logs')
-                        ->with('success', "Excel file processed successfully. Imported {$importedRowsCount} rows.");
+                    // return response()
+                    //     ->json('admin.excel.logs')
+                    //     ->with('success', "Excel file processed successfully. Imported {$importedRowsCount} rows.");
+                    return response()->json(['status'=>'success','message'=>'Excel Uploaded Successfully']);
                 }
 
                 // Move to the next chunk
@@ -264,16 +265,21 @@ class ExcelLogController extends Controller
             // Return success message (even if we exited early).
             // If you want to differentiate, you can do:
             // if ($exitEarly) { ... } else { ... }
-            return redirect()
-                ->route('admin.excel.logs')
-                ->with('success', "Excel file processed successfully. Imported {$importedRowsCount} rows.");
+            // return redirect()
+            //     ->route('admin.excel.logs')
+            //     ->with('success', "Excel file processed successfully. Imported {$importedRowsCount} rows.");
+
+            return response()->json(['status'=>'success','message'=>'Excel file processed successfully. Imported {$importedRowsCount} rows.']);
+
         } catch (\Exception $e) {
             // If anything genuinely fails, it'll end up here
             // DB::rollBack();
-            return redirect()->route('admin.excel.form')->with(
-                'error',
-                'Error processing file: ' . $e->getMessage()
-            );
+            // return redirect()->route('admin.excel.form')->with(
+            //     'error',
+            //     'Error processing file: ' . $e->getMessage()
+            // );
+
+            return response()->json(['status'=>'error','message'=>'Error processing file.']);
         }
     }
 }
