@@ -13,7 +13,7 @@
                 <span class="menu-text">Dashboard</span>
             </div></a>
 
-            <div class="menu-list-item dropdown">
+            <!-- <div class="menu-list-item dropdown">
                 <span class="menu-icon"><i class="fa-solid fa-chart-line"></i></span>
                 <span class="menu-text">About</span>
                 
@@ -23,12 +23,28 @@
                     <li>My List</li>
                 </div>
 
-            </div>
+            </div> -->
 
             <a href="{{route('subadmin.excel.logs')}}"><div class="menu-list-item">
                 <span class="menu-icon"><i class="fa-solid fa-file-excel"></i></span>
                 <span class="menu-text">Records</span>
             </div>    
+
+            <a href="{{route('bc-ledger.index')}}"><div class="menu-list-item">
+                <span class="menu-icon"><i class="fa-solid fa-file-invoice"></i></span>
+                <span class="menu-text">Ledger</span>
+            </div></a>
+
+            <a href="{{route('subadmin.csps')}}"><div class="menu-list-item">
+                <span class="menu-icon"><i class="fa-solid fa-user-plus"></i></span>
+                <span class="menu-text">CSP Agents</span>
+            </div></a>
+
+            <a href="{{route('subadmin.allSubadmins')}}"><div class="menu-list-item">
+                <span class="menu-icon"><i class="fa-solid fa-users"></i></span>
+                <span class="menu-text">Subadmins</span>
+            </div></a>
+
 
         </ul>
     </div>
