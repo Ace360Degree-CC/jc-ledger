@@ -83,6 +83,7 @@
 
                 setTimeout(() => {
                     $('#alert-box').html('');
+                    
                 }, 3000);
             }
 
@@ -113,6 +114,10 @@
                     success:function(res){
                         if(res.status=='success'){
                             showAlert(res.status,res.message);
+                            setTimeout(() => {
+                                window.location.href = <?= route('admin.excel.logs');?>
+                            }, 3000);
+                            
                         }
                         else{
                             showAlert('error',res.message);
