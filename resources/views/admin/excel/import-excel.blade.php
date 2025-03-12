@@ -115,7 +115,7 @@
                         if(res.status=='success'){
                             showAlert(res.status,res.message);
                             setTimeout(() => {
-                                window.location.href = <?= route('admin.excel.logs');?>
+                                window.location.href = "<?= route('admin.excel.logs');?>"
                             }, 3000);
                             
                         }

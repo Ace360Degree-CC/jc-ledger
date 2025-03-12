@@ -114,7 +114,7 @@
                         if(res.status=='success'){
                             showAlert(res.status,res.message);
                             setTimeout(() => {
-                                window.location.href = <?= route('subadmin.excel.logs');?>
+                                window.location.href = "<?= route('subadmin.excel.logs');?>"
                             }, 3000);
                         }
                         else{
