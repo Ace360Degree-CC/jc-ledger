@@ -8,6 +8,7 @@ use App\Http\Controllers\ExcelSchemaController;
 use App\Http\Controllers\SubadminAuthController;
 use App\Http\Controllers\SubadminExcelLogController;
 use App\Http\Controllers\BCLedgerController;
+use App\Http\Controllers\SubadminBCLedgerController;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Route;
 
@@ -65,11 +66,8 @@ Route::prefix('admin')->group(function () {
     Route::post('/registerCSP', [AdminAuthController::class, 'registerCSP'])->middleware('auth:admin')->name('admin.registerCSP');
 
     Route::get('/csps', [AdminAuthController::class, 'showCSPList'])->middleware('auth:admin')->name('admin.csps');
-
     Route::post('/deleteCSP', [AdminAuthController::class, 'deleteCSP'])->middleware('auth:admin')->name('admin.deleteCSP');
-
     Route::get('/editCSP/{id}', [AdminAuthController::class, 'editCSP'])->middleware('auth:admin')->name('admin.editCSP');
-
     Route::post('/updateCSP', [AdminAuthController::class, 'updateCSP'])->middleware('auth:admin')->name('admin.updateCSP');
 
     // Handle Excel upload file in Admin Side
@@ -102,4 +100,23 @@ Route::prefix('subadmin')->group(function () {
     // Handle Excel Log in Subadmin Side
     Route::get('/records', [SubAdminExcelLogController::class, 'index'])->middleware('auth:subadmin')->name('subadmin.excel.logs');
     Route::delete('/excel/logs/{id}', [SubAdminExcelLogController::class, 'deleteLog'])->middleware('auth:subadmin')->name('subadmin.excel.delete');
+
+
+    // BC Ledger routes for subadmin
+    Route::get('/bc-ledger', [SubadminBCLedgerController::class, 'index'])->middleware('auth:subadmin')->name('subadmin.bc-ledger.index');
+    Route::get('/bc-ledger/report', [SubadminBCLedgerController::class, 'generateReport'])->middleware('auth:subadmin')->name('subadmin.bc-ledger.report');
+    Route::get('/bc-ledger/export-pdf', [SubadminBCLedgerController::class, 'exportPdf'])->middleware('auth:subadmin')->name('subadmin.bc-ledger.export-pdf');
+
+
+
+        // Handle csp agents
+        Route::get('/registerCSP', [SubadminAuthController::class, 'showRegisterFormCSP'])->middleware('auth:subadmin')->name('subadmin.addCSP');
+        Route::post('/registerCSP', [SubadminAuthController::class, 'registerCSP'])->middleware('auth:subadmin')->name('subadmin.registerCSP');
+    
+        Route::get('/csps', [SubadminAuthController::class, 'showCSPList'])->middleware('auth:subadmin')->name('subadmin.csps');
+        Route::post('/deleteCSP', [SubadminAuthController::class, 'deleteCSP'])->middleware('auth:subadmin')->name('subadmin.deleteCSP');
+        Route::get('/editCSP/{id}', [SubadminAuthController::class, 'editCSP'])->middleware('auth:subadmin')->name('subadmin.editCSP');
+        Route::post('/updateCSP', [SubadminAuthController::class, 'updateCSP'])->middleware('auth:subadmin')->name('subadmin.updateCSP');
+
+
 });
