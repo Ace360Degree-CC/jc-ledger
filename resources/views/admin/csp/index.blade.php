@@ -38,7 +38,12 @@
             @forelse($csps as $index=>$csp)
                 <tr>
                     <td>{{ $index+1 }}</td>
-                    <td><img src="{{ asset('storage/' . $csp['profile']) }}" alt="Profile Image" width="100"></td>
+                    <td>
+                    <img 
+        src="{{ asset('storage/' . ($csp['profile'] ?? 'csp/profile/noprofile.webp')) }}" 
+        alt="Profile Image" 
+        width="100">
+                    </td>
                     <td>{{ $csp['name'] }}</td>
                     <td>{{ $csp['email'] }}</td>
                     <td>{{ ($csp['status'])?'Active':'In-Active' }}</td>

@@ -25,7 +25,7 @@
         <a href="{{ route('subadmin.addCSP') }}" class="btn-theme">Create New CSP</a>
     </p>
 
-    <table class="text-center table-auto mt-5" border="1" cellpadding="8" cellspacing="0">
+    <table class="text-center w-full table-auto mt-5" border="1" cellpadding="8" cellspacing="0">
         <thead>
             <tr>
                 <th>ID</th>
@@ -40,7 +40,13 @@
             @forelse($csps as $index=>$csp)
                 <tr>
                     <td>{{ $index+1 }}</td>
-                    <td><img src="{{ asset('storage/' . $csp['profile']) }}" alt="Profile Image" width="100"></td>
+                    <td>
+                    <img 
+        src="{{ asset('storage/' . ($csp['profile'] ?? 'csp/profile/noprofile.webp')) }}" 
+        alt="Profile Image" 
+        width="100">
+                    </td>
+
                     <td>{{ $csp['name'] }}</td>
                     <td>{{ $csp['email'] }}</td>
                     <td>{{ ($csp['status'])?'Active':'In-Active' }}</td>

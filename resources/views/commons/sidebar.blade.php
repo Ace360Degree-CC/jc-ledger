@@ -13,7 +13,13 @@
                 <span class="menu-text">Dashboard</span>
             </div>
 
-            <div class="menu-list-item dropdown">
+
+            <a href="{{route('csp.bc-ledger.index')}}"><div class="menu-list-item">
+                <span class="menu-icon"><i class="fa-solid fa-file-invoice"></i></span>
+                <span class="menu-text">Ledger</span>
+            </div></a>
+
+            <!-- <div class="menu-list-item dropdown">
                 <span class="menu-icon"><i class="fa-solid fa-chart-line"></i></span>
                 <span class="menu-text">About</span>
                 
@@ -23,7 +29,7 @@
                     <li>My List</li>
                 </div>
 
-            </div>
+            </div> -->
 
         </ul>
     </div>

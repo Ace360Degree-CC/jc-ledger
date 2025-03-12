@@ -38,7 +38,15 @@
             @forelse($subadmins as $index=>$subadmin)
                 <tr>
                     <td>{{ $index+1 }}</td>
-                    <td><img src="{{ asset('storage/' . $subadmin['profile']) }}" alt="Profile Image" width="100"></td>
+                    
+
+                    <td>
+                    <img 
+        src="{{ asset('storage/' . ($subadmin['profile'] ?? 'subadmin/profile/noprofile.webp')) }}" 
+        alt="Profile Image" 
+        width="100">
+                    </td>
+
                     <td>{{ $subadmin['name'] }}</td>
                     <td>{{ $subadmin['username'] }}</td>
                     <td>{{ $subadmin['email'] }}</td>

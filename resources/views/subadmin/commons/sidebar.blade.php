@@ -30,7 +30,7 @@
                 <span class="menu-text">Records</span>
             </div>    
 
-            <a href="{{route('bc-ledger.index')}}"><div class="menu-list-item">
+            <a href="{{route('subadmin.bc-ledger.index')}}"><div class="menu-list-item">
                 <span class="menu-icon"><i class="fa-solid fa-file-invoice"></i></span>
                 <span class="menu-text">Ledger</span>
             </div></a>
@@ -40,10 +40,7 @@
                 <span class="menu-text">CSP Agents</span>
             </div></a>
 
-            <a href="{{route('subadmin.allSubadmins')}}"><div class="menu-list-item">
-                <span class="menu-icon"><i class="fa-solid fa-users"></i></span>
-                <span class="menu-text">Subadmins</span>
-            </div></a>
+           
 
 
         </ul>

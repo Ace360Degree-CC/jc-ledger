@@ -9,7 +9,7 @@
 @include('subadmin.commons.header')
 
 <div class="container mx-auto">
-    <div class="bg-white p-4 rounded-md" style="max-width:750px">
+    <div class="bg-white mx-auto p-4 rounded-md" style="max-width:750px">
     <h2 class="text-center text-2xl mb-5">Create New CSP Agent</h2>
     <form method="POST" action="{{ route('subadmin.updateCSP') }}" enctype="multipart/form-data">
         @csrf

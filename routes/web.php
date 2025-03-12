@@ -9,6 +9,7 @@ use App\Http\Controllers\SubadminAuthController;
 use App\Http\Controllers\SubadminExcelLogController;
 use App\Http\Controllers\BCLedgerController;
 use App\Http\Controllers\SubadminBCLedgerController;
+use App\Http\Controllers\CSPBCLedgerController;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Route;
 
@@ -23,6 +24,14 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::get('/profile', [AuthController::class, 'showProfile'])->name('auth.profile');
 Route::post('/profile/update', [AuthController::class, 'updateProfile'])->name('auth.profile.update');
+
+
+// BC Ledger routes for CSP
+Route::get('/bc-ledger', [CSPBCLedgerController::class, 'index'])->middleware('auth')->name('csp.bc-ledger.index');
+Route::get('/bc-ledger/report', [CSPBCLedgerController::class, 'generateReport'])->middleware('auth')->name('csp.bc-ledger.report');
+Route::get('/bc-ledger/export-pdf', [CSPBCLedgerController::class, 'exportPdf'])->middleware('auth')->name('csp.bc-ledger.export-pdf');
+
+
 
 Route::get('/assets/{file}', function ($file) {
     $path = base_path('assets/' . $file);
