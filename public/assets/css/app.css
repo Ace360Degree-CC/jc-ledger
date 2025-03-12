@@ -86,8 +86,13 @@ body{
 }
 
 .side-brand img{
-    height: calc(var(--navbar-height) - 10px);
+    height: calc(var(--navbar-height) - 20px);
     width: auto;
+}
+
+.sidebar-theme.collapsed .side-brand img{
+    display: block;
+    margin: auto    ;
 }
 
 .side-brand span{

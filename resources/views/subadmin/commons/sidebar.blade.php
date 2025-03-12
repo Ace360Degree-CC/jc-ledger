@@ -2,7 +2,7 @@
 
 <div class="sidebar-theme collapsed">
     <div class="side-brand">
-        <img src="https://seeklogo.com/images/H/human-technology-company-logo-9F4E576439-seeklogo.com.png">
+        <img src="{{asset('assets/images/jc-logo.png')}}">
         <span>JC Ledgers</span>
     </div>
     <div class="menu-list-box">
