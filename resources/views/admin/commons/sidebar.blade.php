@@ -12,22 +12,37 @@
                 <span class="menu-icon"><i class="fa-solid fa-square-poll-vertical"></i></span>
                 <span class="menu-text">Dashboard</span>
             </div></a>
-
+<!-- 
             <div class="menu-list-item dropdown">
                 <span class="menu-icon"><i class="fa-solid fa-chart-line"></i></span>
-                <span class="menu-text">About</span>
+                <span class="menu-text">Users</span>
                 
                 <div class="dropdown-menu-list">
-                    <li>My List</li>
-                    <li>My List</li>
+                    <li>CSP Agents</li>
+                    <li>Subadmins</li>
                     <li>My List</li>
                 </div>
 
-            </div>
+            </div> -->
 
             <a href="{{route('admin.excel.logs')}}"><div class="menu-list-item">
                 <span class="menu-icon"><i class="fa-solid fa-file-excel"></i></span>
                 <span class="menu-text">Records</span>
+            </div></a>
+
+            <a href="{{route('bc-ledger.index')}}"><div class="menu-list-item">
+                <span class="menu-icon"><i class="fa-solid fa-file-invoice"></i></span>
+                <span class="menu-text">Ledger</span>
+            </div></a>
+
+            <a href="{{route('admin.csps')}}"><div class="menu-list-item">
+                <span class="menu-icon"><i class="fa-solid fa-user-plus"></i></span>
+                <span class="menu-text">CSP Agents</span>
+            </div></a>
+
+            <a href="{{route('admin.allSubadmins')}}"><div class="menu-list-item">
+                <span class="menu-icon"><i class="fa-solid fa-users"></i></span>
+                <span class="menu-text">Subadmins</span>
             </div></a>
 
         </ul>

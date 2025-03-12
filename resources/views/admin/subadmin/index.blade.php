@@ -2,9 +2,12 @@
 <html>
 <head>
     <title>JC | Admin - All Subadmins</title>
+    @include('commons.headerlinks')
 </head>
 <body>
-    <h2>All Subadmins</h2>
+
+    @include('admin.commons.header')
+    
 
     @if (session('success'))
     <div class="alert alert-success">
@@ -13,11 +16,13 @@
     @endif
 
     <!-- If you want a link to create a new subadmin -->
-    <p>
-        <a href="{{ route('admin.addSubadmin') }}">Create New Subadmin</a>
-    </p>
 
-    <table border="1" cellpadding="8" cellspacing="0">
+    <div class="container mx-auto">
+        <div class="w-full bg-white p-4 rounded-md">
+        <h2 class="text-center text-2xl">All Subadmins</h2>
+
+        <a href="{{ route('admin.addSubadmin') }}" class="btn-theme">Create New Subadmin</a>
+        <table  class="w-full mt-5 table-auto text-center" border="1" cellpadding="8" cellspacing="0">
         <thead>
             <tr>
                 <th>ID</th>
@@ -40,14 +45,14 @@
                     <td>{{ ($subadmin['status'])?"Active":"In-Active" }}</td>
                     <td>
                         <!-- Edit link -->
-                        <a href="{{ route('subadmin.edit', $subadmin['id']) }}">Edit</a>
+                        <a href="{{ route('subadmin.edit', $subadmin['id']) }}"><button class="p-2 px-4 bg-gray-700 text-white rounded-md cursor-pointer">Edit</button></a>
 
                         <!-- Delete form -->
                         <form action="{{ route('admin.deleteSubadmin') }}" method="POST" style="display:inline;">
                             @csrf
                             <!-- Put the subadmin ID in a hidden field -->
                             <input type="hidden" name="id" value="{{ $subadmin['id'] }}">
-                            <button type="submit" onclick="return confirm('Are you sure you want to delete this subadmin?')">
+                            <button type="submit" class="p-2 px-4 bg-red-700 text-white rounded-md cursor-pointer" onclick="return confirm('Are you sure you want to delete this subadmin?')">
                                 Delete
                             </button>
                         </form>
@@ -60,5 +65,13 @@
             @endforelse
         </tbody>
     </table>
+
+        </div>   
+    </div>   
+
+
+    @include('commons.footer')
+
+   
 </body>
 </html>
