@@ -63,8 +63,9 @@
                 <label for="cspAgent" class="form-label">Select CSP Agent:</label>
                 <select id="cspAgent" class="form-select">
                     <option value="">All Agents</option>
-                    <option value="11621584">Alamgir Valialam Ansari</option>
-                    <!-- Add more agents dynamically from your Laravel backend -->
+                    @foreach($agents as $csp)
+                    <option value="{{ $csp['id'] }}"> {{ $csp['name'] }} </option>
+                    @endforeach
                 </select>
             </div>
             <div class="col-md-4">

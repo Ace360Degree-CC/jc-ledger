@@ -4,16 +4,14 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use PDF;
+use App\Models\User;
 
 class SubadminBCLedgerController extends Controller
 {
     public function index()
     {
         // Get CSP agents from your database
-        $agents = [
-            ['id' => '11621584', 'name' => 'Alamgir Valialam Ansari'],
-            // Add more agents as needed
-        ];
+        $agents = User::select('id', 'name')->get()->toArray();
         
         return view('subadmin.excel.ledger', compact('agents'));
     }

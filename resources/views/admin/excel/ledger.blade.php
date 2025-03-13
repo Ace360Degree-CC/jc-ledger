@@ -55,27 +55,38 @@
 </head>
 <body>
     <div class="report-container">
-        <div class="no-print filters row">
-            <div class="col-12">
-                <a href="{{route('admin.excel.logs')}}"><button class="btn btn-dark d-block ms-auto">Back</button></a>
-            </div>
-            <div class="col-md-4">
-                <label for="cspAgent" class="form-label">Select CSP Agent:</label>
-                <select id="cspAgent" class="form-select">
-                    <option value="">All Agents</option>
-                    <option value="11621584">Alamgir Valialam Ansari</option>
-                    <!-- Add more agents dynamically from your Laravel backend -->
-                </select>
-            </div>
-            <div class="col-md-4">
-                <label for="monthYear" class="form-label">Select Month-Year:</label>
-                <input type="month" id="monthYear" class="form-control" value="2024-10">
-            </div>
-            <div class="col-md-4 d-flex align-items-end">
-                <button id="generateReport" class="btn btn-primary me-2">Generate Report</button>
-                <button id="exportPdf" class="btn btn-success">Export PDF</button>
-            </div>
+    
+
+    <div class="no-print filters row">
+    <div class="col-12">
+        <a href="{{route('admin.excel.logs')}}"><button class="btn btn-dark d-block ms-auto">Back</button></a>
+    </div>
+    
+    <form action="{{route('bc-ledger.report')}}" method="POST" class="row" id="reportForm">
+        @csrf
+        <div class="col-md-6">
+            <label for="cspAgent" class="form-label">Select CSP Agent:</label>
+            <select id="cspAgent" name="cspAgent" class="form-select">
+                <option value="">All Agents</option>
+                @foreach($agents as $csp)
+                <option value="{{ $csp['ko_code'] }}"> {{ $csp['name'] }} </option>
+                @endforeach
+            </select>
         </div>
+        <div class="col-md-6">
+            <label for="monthYear" class="form-label">Select Month-Year:</label>
+            <input type="month" id="monthYear" name="monthYear" class="form-control" value="2024-10">
+        </div>
+        
+        <div class="col-md-12 mt-3 d-flex justify-content-end">
+            <button type="submit" class="btn btn-primary me-2">Generate Report</button>
+        </div>
+    </form>
+    
+    <div class="col-md-12 mt-3 d-flex justify-content-end">
+        <button id="exportPdf" class="btn btn-success">Export PDF</button>
+    </div>
+</div>
 
         <div id="reportContent">
             <div class="report-title">BC Ledger Month of Oct-2024</div>
@@ -352,10 +363,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        document.getElementById('generateReport').addEventListener('click', function() {
-            // In a real implementation, this would call your Laravel backend
-            alert('Report would be generated with selected filters in a real implementation');
-        });
+        
 
         document.getElementById('exportPdf').addEventListener('click', function() {
             // This would trigger your Laravel DOM PDF export

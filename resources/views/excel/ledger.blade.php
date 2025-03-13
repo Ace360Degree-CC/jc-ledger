@@ -60,17 +60,13 @@
                 <a href="{{route('dashboard')}}"><button class="btn btn-dark d-block ms-auto">Back</button></a>
             </div>
             <div class="col-md-4">
-                <label for="cspAgent" class="form-label">Select CSP Agent:</label>
-                <select id="cspAgent" class="form-select">
-                    <option value="">All Agents</option>
-                    <option value="11621584">Alamgir Valialam Ansari</option>
-                    <!-- Add more agents dynamically from your Laravel backend -->
-                </select>
-            </div>
-            <div class="col-md-4">
                 <label for="monthYear" class="form-label">Select Month-Year:</label>
                 <input type="month" id="monthYear" class="form-control" value="2024-10">
             </div>
+            <div class="col-md-4">
+                
+            </div>
+            
             <div class="col-md-4 d-flex align-items-end">
                 <button id="generateReport" class="btn btn-primary me-2">Generate Report</button>
                 <button id="exportPdf" class="btn btn-success">Export PDF</button>

@@ -88,8 +88,8 @@ Route::prefix('admin')->group(function () {
     Route::delete('/excel/logs/{id}', [ExcelLogController::class, 'deleteLog'])->middleware('auth:admin')->name('admin.excel.delete');
 
     // BC Ledger routes
-    Route::get('/bc-ledger', [BCLedgerController::class, 'index'])->name('bc-ledger.index');
-    Route::get('/bc-ledger/report', [BCLedgerController::class, 'generateReport'])->name('bc-ledger.report');
+    Route::get('/bc-ledger', [BCLedgerController::class, 'index'])->middleware('auth:admin')->name('bc-ledger.index');
+    Route::post('/bc-ledger/report', [BCLedgerController::class, 'generateReport'])->name('bc-ledger.report');
     Route::get('/bc-ledger/export-pdf', [BCLedgerController::class, 'exportPdf'])->name('bc-ledger.export-pdf');
 });
 
