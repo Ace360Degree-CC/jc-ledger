@@ -1,6 +1,14 @@
 
 // My Javascript - Hameed
 
+// Side Bar Load 
+let SideBarCollapsed = localStorage.getItem('sidebar')===true;
+
+function updateSidebarLocal(){
+    SideBarCollapsed=!SideBarCollapsed
+    localStorage.setItem('sidebar',SideBarCollapsed);
+}
+
 
 // Toggle Sidebar with Toggle Button Click 
 const sideBarToggler = document.getElementById('sidebar-toggle');
@@ -16,11 +24,29 @@ sideBarToggler.addEventListener('click', ()=>{
     PageWrapper.classList.toggle('collapsed');
     toggleIcon.classList.toggle('fa-expand');
     toggleIcon.classList.toggle('fa-compress');
+    updateSidebarLocal();
 });
 
+function expandMenu(){
+    sidebar.classList.remove('collapsed');
+    sidebar.classList.add('expanded');
+    navBar.classList.add('expanded');
+    PageWrapper.classList.add('collapsed');
+}
 
 
+sidebar.addEventListener('mouseenter',function(){
+    expandMenu();
+});
 
+sidebar.addEventListener('mouseleave',function(){
+    if(SideBarCollapsed){
+    sidebar.classList.add('collapsed');
+    sidebar.classList.remove('expanded');
+    navBar.classList.remove('expanded');
+    PageWrapper.classList.remove('collapsed');
+    }
+})
 
 
 const dropDownTrigger = document.querySelectorAll('.menu-list-item.dropdown');
@@ -45,6 +71,16 @@ document.addEventListener('click', function (event) {
         profileMenu.classList.remove('show');
     }
 });
+
+
+
+
+
+// datatable Js 
+
+let table = new DataTable('.datatable');
+
+
 
 
 

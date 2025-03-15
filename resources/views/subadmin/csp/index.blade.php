@@ -25,7 +25,8 @@
         <a href="{{ route('subadmin.addCSP') }}" class="btn-theme">Create New CSP</a>
     </p>
 
-    <table class="text-center w-full table-auto mt-5" border="1" cellpadding="8" cellspacing="0">
+    <div class="theme-table mt-5 text-center">
+    <table class="datatable">
         <thead>
             <tr>
                 <th>ID</th>
@@ -44,7 +45,7 @@
                     <img 
         src="{{ asset('storage/' . ($csp['profile'] ?? 'csp/profile/noprofile.webp')) }}" 
         alt="Profile Image" 
-        width="100">
+        style="width:auto;height:80px;margin:auto;display:block">
                     </td>
 
                     <td>{{ $csp['name'] }}</td>
@@ -72,6 +73,7 @@
             @endforelse
         </tbody>
     </table>
+</div>
 
 
 </div>

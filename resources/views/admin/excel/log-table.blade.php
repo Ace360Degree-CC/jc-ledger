@@ -22,9 +22,9 @@
         </a>
 
 
-        <div class="border border-gray-300 mt-5 rounded-md">
-        <table class="w-full text-center ">
-            <thead class="p-4 border-b-2 border-gray-200">
+        <div class="theme-table">
+        <table class=" datatable ">
+            <thead class="">
                 <tr class="">
                     <th>Uploaded By</th>
                     <th>Upload From</th>
@@ -75,9 +75,7 @@
                                     </td>
                             </tr>
                         @empty
-                            <tr>
-                                <td colspan="5" class="text-center">No records found</td>
-                            </tr>
+       
                         @endforelse
                     </tbody>
         </table>

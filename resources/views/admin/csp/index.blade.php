@@ -23,7 +23,8 @@
 
         <a href="{{ route('admin.addCSP') }}" class="btn-theme mb-4">Create New CSP</a>
 
-        <table class="w-full mt-5 table-auto text-center" border="1" cellpadding="8" cellspacing="0">
+        <div class="theme-table mt-5">
+        <table class="datatable text-center" >
         <thead>
             <tr>
                 <th>ID</th>
@@ -40,9 +41,9 @@
                     <td>{{ $index+1 }}</td>
                     <td>
                     <img 
-        src="{{ asset('storage/' . ($csp['profile'] ?? 'csp/profile/noprofile.webp')) }}" 
-        alt="Profile Image" 
-        width="100">
+                        src="{{ asset('storage/' . ($csp['profile'] ?? 'csp/profile/noprofile.webp')) }}" 
+                        alt="Profile Image" 
+                        style="height:100px;width:auto;display:block;margin:auto">
                     </td>
                     <td>{{ $csp['name'] }}</td>
                     <td>{{ $csp['email'] }}</td>
@@ -68,7 +69,8 @@
                 </tr>
             @endforelse
         </tbody>
-    </table>
+        </table>
+        </div>
 
     </div>
     </div>

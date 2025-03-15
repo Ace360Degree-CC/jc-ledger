@@ -22,7 +22,8 @@
         <h2 class="text-center text-2xl">All Subadmins</h2>
 
         <a href="{{ route('admin.addSubadmin') }}" class="btn-theme">Create New Subadmin</a>
-        <table  class="w-full mt-5 table-auto text-center" border="1" cellpadding="8" cellspacing="0">
+        <div class="theme-table mt-5">
+        <table class="datatable text-center">
         <thead>
             <tr>
                 <th>ID</th>
@@ -44,7 +45,7 @@
                     <img 
         src="{{ asset('storage/' . ($subadmin['profile'] ?? 'subadmin/profile/noprofile.webp')) }}" 
         alt="Profile Image" 
-        width="100">
+        style="height:60px;width:auto;display:block;margin:auto">
                     </td>
 
                     <td>{{ $subadmin['name'] }}</td>
@@ -73,6 +74,9 @@
             @endforelse
         </tbody>
     </table>
+
+        </div>   
+
 
         </div>   
     </div>   

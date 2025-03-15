@@ -13,8 +13,8 @@
                 <div class="profile-menu">
                         <h4 class="text-md m-0 font-semibold">{{auth()->user()->name}}</h4>
                         <p class="mb-2 text-sm">{{auth()->user()->email}}</p>
-                        <div class="profile-items px-3 py-2 hover:bg-gray-200 mb-1 cursor-pointer">My Profile</div>
-                        <div class="profile-items px-3 py-2 hover:bg-gray-200 mb-1 cursor-pointer">Support</div>
+                        <a href="{{route('admin.myprofile')}}"><div class="profile-items px-3 py-2 hover:bg-gray-200 mb-1 cursor-pointer">My Profile</div></a>
+                        <!-- <div class="profile-items px-3 py-2 hover:bg-gray-200 mb-1 cursor-pointer">Support</div> -->
                         <hr class="bg-gray-600">
                         <form action="{{ route('admin.logout') }}" method="POST">
                              @csrf
