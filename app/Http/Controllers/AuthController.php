@@ -27,7 +27,8 @@ public function updateProfile(Request $request)
         'name' => 'required|string|max:255',
         'email' => 'required|email|unique:users,email,' . $user->id,
         'password' => 'nullable|min:6',
-        'profile' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
+        'profile' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+        'signature' => 'nullable|image|mimes:jpeg,png,jpg|max:2048'
     ]);
 
     // Update name & email
@@ -54,6 +55,22 @@ public function updateProfile(Request $request)
 
         // Save the image name in the database
         $user->profile = $imageName;
+    }
+
+    //Update signature if provided
+    if($request->hasFile('signature')){
+        //Delete old signature if exists
+        if($user->signature){
+            Storage::disk('public')->delete('csp/signature/' . $user->signature);
+        }
+
+        //Store new signature
+        $signature = $request->file('signature');
+        $signatureName = time().'_'.$user->ko_code.'.'.$signature->extension();
+        $signature->storeAs('csp/signature', $signatureName, 'public');
+
+        //Save the signature in the database
+        $user->signature = $signatureName;
     }
 
     $user->save();

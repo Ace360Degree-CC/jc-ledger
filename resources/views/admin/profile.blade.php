@@ -33,7 +33,7 @@
                                 @if($admin->profile)
                                     <p class="mb-4 text-xl">
                                         <strong>Profile Image:</strong><br>
-                                        <img src="{{ url('storage/'.$admin->profile) }}" alt="Profile" width="100">
+                                        <img src="{{ asset('storage/'.$admin->profile) }}" alt="Profile" width="200">
                                     </p>
                                 @else
                                     <p class="mb-4 text-xl"><strong>Profile Image:</strong> None</p>
