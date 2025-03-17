@@ -10,6 +10,7 @@ use App\Http\Controllers\SubadminExcelLogController;
 use App\Http\Controllers\BCLedgerController;
 use App\Http\Controllers\SubadminBCLedgerController;
 use App\Http\Controllers\CSPBCLedgerController;
+use App\Http\Controllers\CSPDocuments;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Route;
 
@@ -30,6 +31,9 @@ Route::post('/profile/update', [AuthController::class, 'updateProfile'])->name('
 Route::get('/bc-ledger', [CSPBCLedgerController::class, 'index'])->middleware('auth')->name('csp.bc-ledger.index');
 Route::post('/bc-ledger/report', [CSPBCLedgerController::class, 'generateReport'])->middleware('auth')->name('csp.bc-ledger.report');
 Route::get('/bc-ledger/export-pdf', [CSPBCLedgerController::class, 'exportPdf'])->middleware('auth')->name('csp.bc-ledger.export-pdf');
+
+Route::get('/engagement-Certificate',[CSPDocuments::class,'engagementCertificate'])->middleware('auth')->name('csp.engagement.certificate');
+Route::get('/csp-id',[CSPDocuments::class,'cspIdentity'])->middleware('auth')->name('csp.id');
 
 
 
