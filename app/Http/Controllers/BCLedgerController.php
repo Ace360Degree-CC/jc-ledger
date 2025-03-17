@@ -13,10 +13,11 @@ class BCLedgerController extends Controller
     public function index()
     {
         // Get CSP agents from your database
-        $agents = User::select('id', 'ko_code', 'name')->get()->toArray();
+        $data['agents'] = User::select('id', 'ko_code', 'name')->get()->toArray();
         //print_r("<pre>");print_r($agents);exit;
-        
-        return view('admin.excel.ledger', compact('agents'));
+        $data['cspAgentID '] = '';
+        $data['isindex'] = 'Select CSP Agent and Month-Year to view records';
+        return view('admin.excel.ledger')->with($data);
     }
     
     public function generateReport(Request $request)
@@ -29,14 +30,40 @@ class BCLedgerController extends Controller
         
         $agentId = $request->input('cspAgent');
         $monthYear = $request->input('monthYear');
-        $exceLogData = ExcelLog::where('month',$monthYear)->first()->toArray();
+        $exceLogData = ExcelLog::where('month',$monthYear)->first();
+
+        $currentCSPName = User::select('name')->where('ko_code', $agentId)->first()->toArray();
+        //print_r($currentCSPName['name']);exit;
+
+        // Parse month and year
+        list($year, $month) = explode('-', $monthYear);
+        $monthName = date('M', mktime(0, 0, 0, $month, 1));
+        $data['month'] = $monthName;
+        $data['year'] = $year;
+        $data['agents'] = User::select('id', 'ko_code', 'name')->get()->toArray();
+
+        $data['cspAgentID'] = $agentId;
+        $data['monthyear'] = $monthYear;
+
+        if(!isset($exceLogData) && !isset($exceLogData['uniqID'])){
+            $data['error'] = "Record not found for month ". $monthName .' - '. $year;
+
+            return view('admin.excel.ledger')->with($data);
+        }
+        
         $excelUniqID = $exceLogData['uniqID'];
 
-        $ledgerData = ExcelData::where(['uniqID'=>$excelUniqID, 'B'=>$agentId])->first()->toArray();
+        $ledgerData = ExcelData::where(['uniqID'=>$excelUniqID, 'B'=>$agentId])->first();
+
+        if(!isset($ledgerData) ){
+            $data['error'] = "Record not found for CSP ".$currentCSPName['name'] ." of month ". $monthName .' - '. $year;
+
+            return view('admin.excel.ledger')->with($data);
+        }
 
         // print_r("<pre>");print_r($ledgerData);exit;
 
-        $data['cspAgentID'] = $agentId;
+        
         $data['cspAgentName'] = $ledgerData['I'];
         $data['zone'] = $ledgerData['E'];
         $data['branch'] = $ledgerData['F'];
@@ -79,14 +106,14 @@ class BCLedgerController extends Controller
         $data['LoanUpto20K-25KAmount'] = $ledgerData['BY'];
         $data['LoanUpto20K-25KCommission'] = $ledgerData['BZ'];
 
-        $data['Min25%LoanDisbur25k-100k_Amount'] = $ledgerData['CA'];
-        $data['Min25%LoanDisbur25k-100k_Commission'] = $ledgerData['CB'];
+        $data['Min25perLoanDisbur25k_100k_Amount'] = $ledgerData['CA'];
+        $data['Min25perLoanDisbur25k_100k_Commission'] = $ledgerData['CB'];
 
-        $data['Min25%LoanDisburMore100k_Amount'] = $ledgerData['CC'];
-        $data['Min25%LoanDisburMore100k_Commission'] = $ledgerData['CD'];
+        $data['Min25perLoanDisburMore100k_Amount'] = $ledgerData['CC'];
+        $data['Min25perLoanDisburMore100k_Commission'] = $ledgerData['CD'];
 
-        $data['LoanRepayBetwn25k-100k_Amount'] = $ledgerData['CI'];
-        $data['LoanRepayBetwn25k-100k_Commission'] = $ledgerData['CJ'];
+        $data['LoanRepayBetwn25k_100k_Amount'] = $ledgerData['CI'];
+        $data['LoanRepayBetwn25k_100k_Commission'] = $ledgerData['CJ'];
 
         $data['LoanRepayMore100k_Amount'] = $ledgerData['CK'];
         $data['LoanRepayMore100k_Commission'] = $ledgerData['CL'];
@@ -95,16 +122,16 @@ class BCLedgerController extends Controller
         $data['CurrentAccountOpen_Count'] = $ledgerData['BE'];
         $data['CurrentAccountOpen_Commission'] = $ledgerData['BF'];
 
-        $data['NPA_RecoveryAmnt+SecurityAge1to1-5_Amount'] = $ledgerData['BK'];
-        $data['NPA_RecoveryAmnt+SecurityAge1to1-5_Commission'] = $ledgerData['BL'];
+        $data['NPA_RecoveryAmntSecurityAge1to1_5_Amount'] = $ledgerData['BK'];
+        $data['NPA_RecoveryAmntSecurityAge1to1_5_Commission'] = $ledgerData['BL'];
 
 
-        $data['NPA_RecoveryAmntWithoutSecurityAge1to1-5orWithSecurityAge1-5to2_Amount'] = $ledgerData['BM'];
-        $data['NPA_RecoveryAmntWithoutSecurityAge1to1-5orWithSecurityAge1-5to2_Commission'] = $ledgerData['BN'];
+        $data['NPA_RecoveryAmntWithoutSecurityAge1to1_5orWithSecurityAge1_5to2_Amount'] = $ledgerData['BM'];
+        $data['NPA_RecoveryAmntWithoutSecurityAge1to1_5orWithSecurityAge1_5to2_Commission'] = $ledgerData['BN'];
 
 
-        $data['NPA_RecoveryAmntWithoutSecurityAge1-5to2orWithSecurityAge2to3_Amount'] = $ledgerData['BO'];
-        $data['NPA_RecoveryAmntWithoutSecurityAge1-5to2orWithSecurityAge2to3_Commission'] = $ledgerData['BP'];
+        $data['NPA_RecoveryAmntWithoutSecurityAge1_5to2orWithSecurityAge2to3_Amount'] = $ledgerData['BO'];
+        $data['NPA_RecoveryAmntWithoutSecurityAge1_5to2orWithSecurityAge2to3_Commission'] = $ledgerData['BP'];
 
 
         $data['NPA_RecoveryAmntWithoutSecurityAge2to3orWithSecurityAge3to5_Amount'] = $ledgerData['BQ'];
@@ -114,115 +141,39 @@ class BCLedgerController extends Controller
         $data['NPA_RecoveryAmntWithoutSecurityAge3to5orOver5_Amount'] = $ledgerData['BS'];
         $data['NPA_RecoveryAmntWithoutSecurityAge3to5orOver5_Commission'] = $ledgerData['BT'];
 
-        $data['PPF-SSA-SCSS_Count'] = $ledgerData['CP'];
-        $data['PPF-SSA-SCSS_Commission'] = $ledgerData['CQ'];
+        $data['PPF_SSA_SCSS_Count'] = $ledgerData['CP'];
+        $data['PPF_SSA_SCSS_Commission'] = $ledgerData['CQ'];
 
         $data['NPS_Count'] = $ledgerData['CR'];
         $data['NPS_Commission'] = $ledgerData['CS'];
 
-        $data['SGB-FRSB_Amount'] = $ledgerData['CU'];
-        $data['SGB-FRSB_Commission'] = $ledgerData['CV'];
+        $data['SGB_FRSB_Amount'] = $ledgerData['CU'];
+        $data['SGB_FRSB_Commission'] = $ledgerData['CV'];
 
 
-        $data['QuarterlyAVG_BAL500-1000_Count'] = $ledgerData['CW'];
-        $data['QuarterlyAVG_BAL500-1000_Commission'] = $ledgerData['CX'];
+        $data['QuarterlyAVG_BAL500_1000_Count'] = $ledgerData['CW'];
+        $data['QuarterlyAVG_BAL500_1000_Commission'] = $ledgerData['CX'];
 
-        $data['QuarterlyAVG_BAL1000-2000_Count'] = $ledgerData['CY'];
-        $data['QuarterlyAVG_BAL1000-2000_Commission'] = $ledgerData['CZ'];
+        $data['QuarterlyAVG_BAL1000_2000_Count'] = $ledgerData['CY'];
+        $data['QuarterlyAVG_BAL1000_2000_Commission'] = $ledgerData['CZ'];
 
         $data['QuarterlyAVG_BALMore2000_Count'] = $ledgerData['CA'];
         $data['QuarterlyAVG_BALMore2000_Commission'] = $ledgerData['CB'];
 
+        $data['Total'] = $ledgerData['DE'];
+        $data['CSP_Share80'] = $ledgerData['DH'];
+        $data['CSP_TDS2'] = $ledgerData['DI'];
+        $data['Bonus'] = '';
+        $data['Net_Payable'] = $ledgerData['DK'];
+        
+        
 
-
-        //print_r("<pre>");print_r($data);exit;
+        //$data['val'] = '';
+        // print_r("<pre>");print_r($data);exit;
         
-        // Parse month and year
-        list($year, $month) = explode('-', $monthYear);
-        $monthName = date('M', mktime(0, 0, 0, $month, 1));
         
-        // Get agent data from DB based on filters
-        // This is where you would implement your database query
-        // For this example, we're using static data
-        $data = [
-            'id' => '11621584',
-            'name' => 'Alamgir Valialam Ansari',
-            'zone' => 'Ahmedabad',
-            'branch' => 'Jamalpur',
-            'entries' => [
-                ['sr_no' => 1, 'description' => 'A/c opened in Finacle', 'amount' => 12, 'commission' => 240],
-                ['sr_no' => 2, 'description' => 'Transactions', 'amount' => 12100, 'commission' => 44],
-                ['sr_no' => 3, 'description' => 'PMJJBY', 'amount' => 1, 'commission' => 23],
-                ['sr_no' => 4, 'description' => 'PMSBY', 'amount' => 4, 'commission' => 4],
-                ['sr_no' => 5, 'description' => 'Aadhar Seeding', 'amount' => null, 'commission' => null],
-                ['sr_no' => 6, 'description' => 'Rupay Activation', 'amount' => null, 'commission' => null],
-                ['sr_no' => 7, 'description' => 'RD', 'amount' => null, 'commission' => null],
-                ['sr_no' => 40, 'description' => 'Quarterly AVG BAL Between 1000 AND 2000 (Jul 2024)', 'amount' => null, 'commission' => null],
-                ['sr_no' => 41, 'description' => 'Quarterly AVG BAL More Than 2000 (Jul 2024)', 'amount' => null, 'commission' => null],
-            ],
-            'total' => 310.50,
-            'subtotal' => 248.40,
-            'tds' => 12.42,
-            'grand_total' => 235.98,
-            'month' => $monthName,
-            'year' => $year
-        ];
-        
-        return view('admin.excel.ledger', compact('data'));
+        return view('admin.excel.ledger')->with($data);
     }
     
-    public function exportPdf(Request $request)
-    {
-        // Similar logic as generateReport to get data
-        $request->validate([
-            'agent_id' => 'nullable|string',
-            'month_year' => 'required|string',
-        ]);
-        
-        $agentId = $request->input('agent_id');
-        $monthYear = $request->input('month_year');
-        
-        // Parse month and year
-        list($year, $month) = explode('-', $monthYear);
-        $monthName = date('M', mktime(0, 0, 0, $month, 1));
-        
-        // Get data (same as above)
-        $data = [
-            'id' => '11621584',
-            'name' => 'Alamgir Valialam Ansari',
-            'zone' => 'Ahmedabad',
-            'branch' => 'Jamalpur',
-            'entries' => [
-                ['sr_no' => 1, 'description' => 'A/c opened in Finacle', 'amount' => 12, 'commission' => 240],
-                ['sr_no' => 2, 'description' => 'Transactions', 'amount' => 12100, 'commission' => 44],
-                ['sr_no' => 3, 'description' => 'PMJJBY', 'amount' => 1, 'commission' => 23],
-                ['sr_no' => 4, 'description' => 'PMSBY', 'amount' => 4, 'commission' => 4],
-                ['sr_no' => 5, 'description' => 'Aadhar Seeding', 'amount' => null, 'commission' => null],
-                ['sr_no' => 6, 'description' => 'Rupay Activation', 'amount' => null, 'commission' => null],
-                ['sr_no' => 7, 'description' => 'RD', 'amount' => null, 'commission' => null],
-                ['sr_no' => 40, 'description' => 'Quarterly AVG BAL Between 1000 AND 2000 (Jul 2024)', 'amount' => null, 'commission' => null],
-                ['sr_no' => 41, 'description' => 'Quarterly AVG BAL More Than 2000 (Jul 2024)', 'amount' => null, 'commission' => null],
-            ],
-            'total' => 310.50,
-            'subtotal' => 248.40,
-            'tds' => 12.42,
-            'grand_total' => 235.98,
-            'month' => $monthName,
-            'year' => $year
-        ];
-        
-        // Generate PDF using DOM PDF
-        $pdf = PDF::loadView('bc-ledger.pdf', compact('data'));
-        
-        // Set PDF options for better rendering
-        $pdf->setPaper('A4');
-        $pdf->setOptions([
-            'isHtml5ParserEnabled' => true,
-            'isRemoteEnabled' => true,
-            'defaultFont' => 'sans-serif'
-        ]);
-        
-        // Download PDF
-        return $pdf->download("BC_Ledger_{$data['name']}_{$monthName}_{$year}.pdf");
-    }
+
 }

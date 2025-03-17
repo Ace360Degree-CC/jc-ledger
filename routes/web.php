@@ -28,7 +28,7 @@ Route::post('/profile/update', [AuthController::class, 'updateProfile'])->name('
 
 // BC Ledger routes for CSP
 Route::get('/bc-ledger', [CSPBCLedgerController::class, 'index'])->middleware('auth')->name('csp.bc-ledger.index');
-Route::get('/bc-ledger/report', [CSPBCLedgerController::class, 'generateReport'])->middleware('auth')->name('csp.bc-ledger.report');
+Route::post('/bc-ledger/report', [CSPBCLedgerController::class, 'generateReport'])->middleware('auth')->name('csp.bc-ledger.report');
 Route::get('/bc-ledger/export-pdf', [CSPBCLedgerController::class, 'exportPdf'])->middleware('auth')->name('csp.bc-ledger.export-pdf');
 
 
