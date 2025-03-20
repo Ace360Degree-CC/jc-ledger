@@ -8,7 +8,9 @@ use Illuminate\Support\Facades\Hash;
 use App\Models\Admin;
 use App\Models\Subadmin;
 use App\Models\User;
+use App\Models\Documents;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 
 class AdminAuthController extends Controller
 {
@@ -373,5 +375,231 @@ class AdminAuthController extends Controller
                ->with('success', $csp->name. ' updated successfully.');
 
     }
+
+
+
+    ////////////// MANAGE DOCUMENTS VERIFICATION///////////////
+    ///////////////////////////////////////////////////////////
+
+    /**
+ * Get documents for a specific CSP
+ * 
+ * @param int $id The CSP ID
+ * @return \Illuminate\Http\JsonResponse
+ */
+public function getCspDocuments($id)
+{
+    // Find the CSP
+    $csp = User::findOrFail($id);
+    
+    // Get all documents for this CSP's KO code
+    $documents = Documents::where('ko_code', $csp->ko_code)->get();
+    
+    // Format data for easier consumption in the frontend
+    $formattedData = [];
+    
+    foreach ($documents as $document) {
+        $formattedData[$document->certificate_id] = [
+            'id' => $document->id,
+            'certificate_name' => $document->certificate_name,
+            'status' => $document->status,
+            'verified' => $document->verified,
+            'message' => $document->message
+        ];
+    }
+    
+    return response()->json($formattedData);
+}
+
+/**
+ * Update documents status, verification, and messages
+ * 
+ * @param \Illuminate\Http\Request $request
+ * @return \Illuminate\Http\RedirectResponse
+ */
+public function updateDocuments(Request $request)
+{
+    // Validate the request
+    $request->validate([
+        'csp_id' => 'required|exists:users,id',
+        'verified' => 'array',
+        'status' => 'array',
+        'reason' => 'array'
+    ]);
+    
+    $cspId = $request->input('csp_id');
+    $csp = User::findOrFail($cspId);
+    $koCode = $csp->ko_code;
+    
+    // List of certificate IDs
+    $certificateIds = [1, 2, 3]; // ID-Card, BC Certificate, BC Agreement
+    $certificateNames = [
+        1 => 'ID-Card',
+        2 => 'BC Certificate',
+        3 => 'BC Agreement'
+    ];
+    
+    foreach ($certificateIds as $certId) {
+        // Skip if status is not selected in the form
+        if (!isset($request->status[$certId]) || empty($request->status[$certId])) {
+            continue;
+        }
+        
+        // Get verified status, document status, and reason
+        $verified = isset($request->verified[$certId]) ? 1 : 0;
+        $status = $request->status[$certId];
+        $message = $request->reason[$certId] ?? '';
+        
+        // Check if document already exists for this ko_code and certificate_id
+        $existing = Documents::where('ko_code', $koCode)
+                            ->where('certificate_id', $certId)
+                            ->first();
+        
+        if ($existing) {
+            // Update existing record
+            $existing->certificate_name = $certificateNames[$certId];
+            $existing->status = $status;
+            $existing->verified = $verified;
+            $existing->message = $message;
+            $existing->save();
+        } else {
+            // Only create new record if status is not empty
+            if (!empty($status) && $status !== 'Select') {
+                Documents::create([
+                    'ko_code' => $koCode,
+                    'certificate_id' => $certId,
+                    'certificate_name' => $certificateNames[$certId],
+                    'status' => $status,
+                    'verified' => $verified,
+                    'message' => $message
+                ]);
+            }
+        }
+    }
+    
+    return redirect()->back()->with('success', 'Documents updated successfully');
+}
+
+/**
+ * Upload BC Agreement document
+ * 
+ * @param \Illuminate\Http\Request $request
+ * @return \Illuminate\Http\RedirectResponse
+ */
+public function uploadAgreement(Request $request)
+{
+    // Validate the request
+    $request->validate([
+        'csp_id' => 'required|exists:users,id',
+        'agreement_file' => 'required|file|mimes:pdf,jpg,jpeg,png|max:2048',
+        'agreement_date' => 'required|date'
+    ]);
+    
+    $cspId = $request->input('csp_id');
+    $csp = User::findOrFail($cspId);
+    $koCode = $csp->ko_code;
+    
+    // Store the agreement file
+    $filename = $koCode . '_agreement.' . $request->file('agreement_file')->extension();
+    $path = $request->file('agreement_file')->storeAs('agreements', $filename, 'public');
+    
+    // Update or create document record
+    $document = Documents::updateOrCreate(
+        [
+            'ko_code' => $koCode,
+            'certificate_id' => 3 // BC Agreement
+        ],
+        [
+            'certificate_name' => 'BC Agreement',
+            'status' => 'pending', // Set initial status as pending
+            'verified' => 0,
+            'message' => 'Agreement uploaded on ' . date('Y-m-d H:i:s') . '. Agreement date: ' . $request->input('agreement_date')
+        ]
+    );
+    
+    // Store the agreement path and date in a separate agreements table if needed
+    // This is if you have a separate table for agreement details
+    if (Schema::hasTable('agreements')) {
+        DB::table('agreements')->updateOrInsert(
+            ['ko_code' => $koCode],
+            [
+                'file_path' => $path,
+                'agreement_date' => $request->input('agreement_date'),
+                'updated_at' => now()
+            ]
+        );
+    }
+    
+    return redirect()->back()->with('success', 'Agreement uploaded successfully');
+}
+
+/**
+ * View certificate document
+ * 
+ * @param int $cspId The CSP ID
+ * @param int $certificateId The certificate ID
+ * @return \Illuminate\Http\Response
+ */
+public function viewCertificate($cspId, $certificateId)
+{
+    // Find the CSP
+    $csp = User::findOrFail($cspId);
+    $koCode = $csp->ko_code;
+    
+    // Logic to retrieve the certificate file path
+    // This is placeholder logic - adjust based on your file storage system
+    $certificateTypes = [
+        1 => 'idcard',
+        2 => 'bccertificate'
+    ];
+    
+    $type = $certificateTypes[$certificateId] ?? 'unknown';
+    
+    // Look for certificate file in storage
+    $path = "certificates/{$koCode}_{$type}.pdf";
+    
+    if (Storage::disk('public')->exists($path)) {
+        return response()->file(storage_path('app/public/' . $path));
+    }
+    
+    // If file not found, return a 404 or redirect
+    return abort(404, 'Certificate file not found');
+}
+
+/**
+ * View agreement document
+ * 
+ * @param int $cspId The CSP ID
+ * @return \Illuminate\Http\Response
+ */
+public function viewAgreement($cspId)
+{
+    // Find the CSP
+    $csp = User::findOrFail($cspId);
+    $koCode = $csp->ko_code;
+    
+    // Check if we have a separate agreements table
+    if (Schema::hasTable('agreements')) {
+        $agreement = DB::table('agreements')->where('ko_code', $koCode)->first();
+        
+        if ($agreement && $agreement->file_path) {
+            return response()->file(storage_path('app/public/' . $agreement->file_path));
+        }
+    }
+    
+    // If not in separate table, look in public storage
+    $possibleExtensions = ['pdf', 'jpg', 'jpeg', 'png'];
+    
+    foreach ($possibleExtensions as $ext) {
+        $path = "agreements/{$koCode}_agreement.{$ext}";
+        if (Storage::disk('public')->exists($path)) {
+            return response()->file(storage_path('app/public/' . $path));
+        }
+    }
+    
+    // If file not found, return a 404 or redirect
+    return abort(404, 'Agreement file not found');
+}
+
 
 }

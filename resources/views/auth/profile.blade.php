@@ -6,7 +6,7 @@
 </head>
 <body>
 
-    @include('admin.commons.header')
+    @include('commons.header')
 
     <div class="container mx-auto">
         

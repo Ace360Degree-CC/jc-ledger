@@ -19,6 +19,11 @@
                 <span class="menu-text">Ledger</span>
             </div></a>
 
+            <a href="{{route('csp.index')}}"><div class="menu-list-item">
+                <span class="menu-icon"><i class="fa-solid fa-certificate"></i></span>
+                <span class="menu-text">Documents</span>
+            </div></a>
+
             <!-- <div class="menu-list-item dropdown">
                 <span class="menu-icon"><i class="fa-solid fa-chart-line"></i></span>
                 <span class="menu-text">About</span>
