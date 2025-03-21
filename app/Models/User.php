@@ -24,6 +24,7 @@ class User extends Authenticatable
         'password',
         'profile',
         'signature',
+        'bc_agreement',
         'status'
     ];
 

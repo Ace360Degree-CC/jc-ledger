@@ -9,12 +9,12 @@
 
     <div style="max-width:750px;margin:auto">
         <div style="text-align:right">
-            <img style="width:300px;" src="{{asset('assets/images/certificates/jc-certificate-logo.PNG')}}">
+            <img style="width:300px;" src="{{ $jc_logo_base64 ?? '' }}">
         </div>
 
         <div style="text-align:center">
             <h2 style="font-size:28px"> Certificate of Engagement as Business Correspondent</h2>
-            <img style="margin:8px auto; width:200px" src="{{ asset('storage/csp/profile/'.$profile) }}"> 
+            <img style="margin:8px auto; width:200px" src="{{ $profile_base64 ?? '' }}"> 
             <div>
             <span style="border:1px solid black; padding:4px; margin:8px auto; font-size:24px;font-weight:bold">{{$ko_id}}</span>
             </div>
@@ -32,7 +32,7 @@
         </div>
         <div>
             <p style="font-size:24px">Thank You</p>
-            <img width="200px" src="{{asset('assets/images/certificates/business-correspondent.PNG')}}">
+            <img width="200px" src="{{ $certificate_footer_base64 ?? '' }}">
         </div>
     </div>    
 

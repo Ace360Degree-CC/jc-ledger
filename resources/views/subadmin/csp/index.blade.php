@@ -43,15 +43,18 @@
                     <td>{{ $index+1 }}</td>
                     <td>
                     <img 
-        src="{{ asset('storage/' . ($csp['profile'] ?? 'csp/profile/noprofile.webp')) }}" 
-        alt="Profile Image" 
-        style="width:auto;height:80px;margin:auto;display:block">
+                        src="{{ asset('storage/csp/profile/' . ($csp['profile'] ?? 'noprofile.webp')) }}" 
+                        alt="Profile Image" 
+                        style="height:100px;width:auto;display:block;margin:auto">
                     </td>
 
                     <td>{{ $csp['name'] }}</td>
                     <td>{{ $csp['email'] }}</td>
                     <td>{{ ($csp['status'])?'Active':'In-Active' }}</td>
                     <td>
+
+                    
+
                         <!-- Edit link -->
                         <a href="{{ route('subadmin.editCSP', $csp['id']) }}"><button class="bg-gray-700 text-white p-2 px-4 rounded-md">Edit</button></a>
 

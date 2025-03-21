@@ -61,7 +61,7 @@
                             </td>
                             <td class="py-3 px-4 border-b text-center">
                                 @if(isset($existingCertificates[$certType['id']]) && $existingCertificates[$certType['id']]['status'] == 'approved' && $existingCertificates[$certType['id']]['status'] == 'approved')
-                                    <a href="{{ route('certificate.view', ['id' => $existingCertificates[$certType['id']]['id']]) }}" class="text-blue-500 hover:underline">
+                                    <a href="{{ route('certificate.view', ['id' => $certType['id']]) }}" class="text-blue-500 hover:underline">
                                         <button class="bg-blue-500 hover:bg-blue-600 text-white py-1 px-3 rounded">
                                             View
                                         </button>
@@ -74,7 +74,7 @@
                             </td>
                             <td class="py-3 px-4 border-b text-center">
                                 @if(isset($existingCertificates[$certType['id']]) && $existingCertificates[$certType['id']]['status'] == 'approved')
-                                    <a href="{{ route('certificate.download', ['id' => $existingCertificates[$certType['id']]['id']]) }}" class="text-green-500 hover:underline">
+                                    <a href="{{ route('certificate.download', ['id' => $certType['id']]) }}" class="text-green-500 hover:underline">
                                         <button class="bg-green-500 hover:bg-green-600 text-white py-1 px-3 rounded">
                                             Download
                                         </button>

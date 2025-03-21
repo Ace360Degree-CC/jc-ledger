@@ -45,6 +45,23 @@ Route::get('/download/{id}',[CSPDocuments::class,'downloadCertificate'])->name('
 
 
 
+//new routes to handle view documents in csp side
+
+    Route::get('/document/identity', [CSPDocuments::class, 'BC_IDCard'])->name('document.identity');
+
+    Route::get('/download/document/identity', [CSPDocuments::class, 'Download_BC_IDCard'])->name('download.document.identity');
+
+    Route::get('/document/certificate', [CSPDocuments::class, 'BCCertificate'])->name('document.certificate');
+
+    Route::get('/download/document/certificate', [CSPDocuments::class, 'Download_BCCertificate'])->name('download.document.certificate');
+
+    Route::get('/csp/document/{documentType}/{koCode}', [AdminDocuments::class, 'documents'])->name('csp.document');
+
+    Route::get('/document/agreement', [CSPDocuments::class, 'BC_Agreement'])->name('document.agreement');
+    Route::get('/download/document/agreement', [CSPDocuments::class, 'Download_BC_Agreement'])->name('download.document.agreement');
+
+
+
 Route::get('/assets/{file}', function ($file) {
     $path = base_path('assets/' . $file);
 
@@ -108,10 +125,10 @@ Route::prefix('admin')->group(function () {
 
     // CSP Documents routes
     Route::get('/csp/documents/{id}', [App\Http\Controllers\AdminAuthController::class, 'getCspDocuments']);
-    Route::post('/updateDocuments', [App\Http\Controllers\AdminAuthController::class, 'updateDocuments'])->name('admin.updateDocuments');
-    Route::post('/uploadAgreement', [App\Http\Controllers\AdminAuthController::class, 'uploadAgreement'])->name('admin.uploadAgreement');
+    
+    
     Route::get('/csp/certificate/{cspId}/{certificateId}', [App\Http\Controllers\AdminAuthController::class, 'viewCertificate']);
-    Route::get('/csp/agreement/{cspId}', [App\Http\Controllers\AdminAuthController::class, 'viewAgreement']);
+    
 
 
 
@@ -123,8 +140,15 @@ Route::prefix('admin')->group(function () {
     Route::get('/mis/download/{filename}', [MisDataController::class, 'download'])->name('mis.download');
 
 
+    Route::get('/csp/document/identity/{koCode}', [AdminDocuments::class, 'BC_IDCard'])->name('csp.document.identity');
     Route::get('/csp/document/certificate/{koCode}', [AdminDocuments::class, 'BCCertificate'])->name('csp.document.certificate');
     Route::get('/csp/document/{documentType}/{koCode}', [AdminDocuments::class, 'documents'])->name('csp.document');
+
+    Route::post('/uploadAgreement', [App\Http\Controllers\AdminDocuments::class, 'uploadAgreement'])->name('admin.uploadAgreement');
+
+    Route::get('/csp/agreement/{cspId}', [App\Http\Controllers\AdminAuthController::class, 'viewAgreement']);
+
+    Route::post('/updateDocuments', [App\Http\Controllers\AdminDocuments::class, 'updateDocuments'])->name('admin.updateDocuments');
 
 });
 

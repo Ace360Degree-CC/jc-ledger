@@ -278,7 +278,7 @@
             
             <form id="agreementForm" action="{{ route('admin.uploadAgreement') }}" method="POST" enctype="multipart/form-data">
                 @csrf
-                <input type="hidden" name="csp_id" id="agreementCspId">
+                <input type="hidden" name="ko_code" id="agreementCspKoCode">
                 
                 <div class="mb-4">
                     <label class="block text-gray-700 mb-2">Upload Agreement File</label>
@@ -302,6 +302,7 @@
     <script>
         // Global variables
         let currentCspId = null;
+        let currentCspKoCode = null;
         let documentsData = {};
         
         // Fetch documents data for a CSP 
@@ -318,6 +319,7 @@
         // Open documents modal
         async function openDocumentsModal(name, koCode, cspId) {
             currentCspId = cspId;
+            currentCspKoCode = koCode;
             document.getElementById('cspName').textContent = name;
             document.getElementById('koCode').textContent = koCode;
             document.getElementById('cspId').value = cspId;
@@ -352,7 +354,7 @@
                     <div class="dropdown">
                         <i class="fa fa-eye cursor-pointer" aria-hidden="true"></i>
                         <div class="dropdown-content">
-                            <a href="#" class="dropdown-item" onclick="viewAgreement()">View Agreement</a>
+                            <a href="#" class="dropdown-item" onclick="viewDocument('agreement')">View Agreement</a>
                             <a href="#" class="dropdown-item" onclick="openAgreementModal()">Upload Agreement</a>
                         </div>
                     </div>
@@ -396,6 +398,12 @@
             koCode = document.getElementById('koCode').textContent;
             //alert(`Viewing ${docType} for KO Code: ${koCode}`);
 
+            if(docType == 'idcard'){
+                // Open in new tab
+                window.open(`{{ url('/admin/csp/document/identity') }}/${koCode}`, '_blank');
+                return;
+            }
+
             // Open in new tab
             window.open(`{{ url('/admin/csp/document') }}/${docType}/${koCode}`, '_blank');
 
@@ -408,14 +416,14 @@
             window.open(`{{ url('/admin/csp/document/certificate') }}/${koCode}`, '_blank');
         }
         
-        // View agreement function
-        function viewAgreement() {
-            window.open(`{{ url('admin/csp/agreement') }}/${currentCspId}`, '_blank');
-        }
+        // // View agreement function
+        // function viewAgreement() {
+        //     window.open(`{{ url('admin/csp/agreement') }}/${currentCspId}`, '_blank');
+        // }
         
         // Open agreement modal
         function openAgreementModal() {
-            document.getElementById('agreementCspId').value = currentCspId;
+            document.getElementById('agreementCspKoCode').value = currentCspKoCode;
             document.getElementById('agreementModal').style.display = 'block';
         }
         
