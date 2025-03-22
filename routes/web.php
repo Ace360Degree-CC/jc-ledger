@@ -10,6 +10,7 @@ use App\Http\Controllers\ExcelController;
 use App\Http\Controllers\ExcelLogController;
 use App\Http\Controllers\ExcelSchemaController;
 use App\Http\Controllers\MisDataController;
+use App\Http\Controllers\SubadminMisController;
 use App\Http\Controllers\SubadminAuthController;
 use App\Http\Controllers\SubadminBCLedgerController;
 use App\Http\Controllers\SubadminDocuments;
@@ -185,4 +186,15 @@ Route::prefix('subadmin')->group(function () {
     Route::get('/csp/agreement/{cspId}', [App\Http\Controllers\AdminAuthController::class, 'viewAgreement']);
 
     Route::post('/updateDocuments', [App\Http\Controllers\SubadminDocuments::class, 'updateDocuments'])->name('subadmin.updateDocuments');
+
+
+    //Handle mis data in subadmin side
+
+    Route::get('/mis/upload', [SubadminMisController::class, 'create'])->name('subadmin.mis.create');
+    Route::post('/mis/upload', [SubadminMisController::class, 'store'])->name('subadmin.mis.store');
+    Route::get('/mis', [SubadminMisController::class, 'index'])->name('subadmin.mis.index');
+    Route::delete('/mis/{id}', [SubadminMisController::class, 'destroy'])->name('subadmin.mis.destroy');
+
+    Route::get('/mis/download/{filename}', [SubadminMisController::class, 'download'])->name('subadmin.mis.download');
+
 });
