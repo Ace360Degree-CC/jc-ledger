@@ -13,13 +13,13 @@
         </div>
 
         <div style="text-align:center">
-            <h2 style="font-size:28px"> Certificate of Engagement as Business Correspondent</h2>
-            <img style="margin:8px auto; width:200px" src="{{ $profile_base64 ?? '' }}"> 
+            <h2 style="font-size:22px"> Certificate of Engagement as Business Correspondent</h2>
+            <img style="margin:4px auto; width:200px" src="{{ $profile_base64 ?? '' }}"> 
             <div>
             <span style="border:1px solid black; padding:4px; margin:8px auto; font-size:24px;font-weight:bold">{{$ko_id}}</span>
             </div>
         </div>
-        <div style="font-size:24px">
+        <div style="font-size:16px">
             <p>It is hereby notified that <strong>JC Ventures Pvt Ltd</strong> has been engaged as Business
             Correspondent for Bank of India. He/She is authorized to source and market
             banking services and products including authorized third party products from
@@ -31,7 +31,7 @@
             </p>
         </div>
         <div>
-            <p style="font-size:24px">Thank You</p>
+            <p style="font-size:20px">Thank You</p>
             <img width="200px" src="{{ $certificate_footer_base64 ?? '' }}">
         </div>
     </div>    
