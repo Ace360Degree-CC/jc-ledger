@@ -1,18 +1,19 @@
 <?php
 
 use App\Http\Controllers\AdminAuthController;
+use App\Http\Controllers\AdminDocuments;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BCLedgerController;
+use App\Http\Controllers\CSPBCLedgerController;
+use App\Http\Controllers\CSPDocuments;
 use App\Http\Controllers\ExcelController;
 use App\Http\Controllers\ExcelLogController;
 use App\Http\Controllers\ExcelSchemaController;
-use App\Http\Controllers\SubadminAuthController;
-use App\Http\Controllers\SubadminExcelLogController;
-use App\Http\Controllers\BCLedgerController;
-use App\Http\Controllers\SubadminBCLedgerController;
-use App\Http\Controllers\CSPBCLedgerController;
-use App\Http\Controllers\CSPDocuments;
 use App\Http\Controllers\MisDataController;
-use App\Http\Controllers\AdminDocuments;
+use App\Http\Controllers\SubadminAuthController;
+use App\Http\Controllers\SubadminBCLedgerController;
+use App\Http\Controllers\SubadminDocuments;
+use App\Http\Controllers\SubadminExcelLogController;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Route;
 
@@ -28,39 +29,33 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::get('/profile', [AuthController::class, 'showProfile'])->name('auth.profile');
 Route::post('/profile/update', [AuthController::class, 'updateProfile'])->name('auth.profile.update');
 
-
 // BC Ledger routes for CSP
 Route::get('/bc-ledger', [CSPBCLedgerController::class, 'index'])->middleware('auth')->name('csp.bc-ledger.index');
 Route::post('/bc-ledger/report', [CSPBCLedgerController::class, 'generateReport'])->middleware('auth')->name('csp.bc-ledger.report');
 Route::get('/bc-ledger/export-pdf', [CSPBCLedgerController::class, 'exportPdf'])->middleware('auth')->name('csp.bc-ledger.export-pdf');
 
-Route::get('/documents',[CSPDocuments::class,'index'])->middleware('auth')->name('csp.index');
-Route::get('/engagement-Certificate',[CSPDocuments::class,'engagementCertificate'])->middleware('auth')->name('csp.engagement.certificate');
-Route::get('/csp-id',[CSPDocuments::class,'cspIdentity'])->middleware('auth')->name('csp.id');
+Route::get('/documents', [CSPDocuments::class, 'index'])->middleware('auth')->name('csp.index');
+Route::get('/engagement-Certificate', [CSPDocuments::class, 'engagementCertificate'])->middleware('auth')->name('csp.engagement.certificate');
+Route::get('/csp-id', [CSPDocuments::class, 'cspIdentity'])->middleware('auth')->name('csp.id');
 
+Route::post('/request', [CSPDocuments::class, 'requestCertificate'])->name('certificate.request');
+Route::get('/view/{id}', [CSPDocuments::class, 'viewCertificate'])->name('certificate.view');
+Route::get('/download/{id}', [CSPDocuments::class, 'downloadCertificate'])->name('certificate.download');
 
-Route::post('/request',[CSPDocuments::class,'requestCertificate'])->name('certificate.request');
-Route::get('/view/{id}',[CSPDocuments::class,'viewCertificate'] )->name('certificate.view');
-Route::get('/download/{id}',[CSPDocuments::class,'downloadCertificate'])->name('certificate.download');
+// new routes to handle view documents in csp side
 
+Route::get('/document/identity', [CSPDocuments::class, 'BC_IDCard'])->name('document.identity');
 
+Route::get('/download/document/identity', [CSPDocuments::class, 'Download_BC_IDCard'])->name('download.document.identity');
 
-//new routes to handle view documents in csp side
+Route::get('/document/certificate', [CSPDocuments::class, 'BCCertificate'])->name('document.certificate');
 
-    Route::get('/document/identity', [CSPDocuments::class, 'BC_IDCard'])->name('document.identity');
+Route::get('/download/document/certificate', [CSPDocuments::class, 'Download_BCCertificate'])->name('download.document.certificate');
 
-    Route::get('/download/document/identity', [CSPDocuments::class, 'Download_BC_IDCard'])->name('download.document.identity');
+Route::get('/csp/document/{documentType}/{koCode}', [AdminDocuments::class, 'documents'])->name('csp.document');
 
-    Route::get('/document/certificate', [CSPDocuments::class, 'BCCertificate'])->name('document.certificate');
-
-    Route::get('/download/document/certificate', [CSPDocuments::class, 'Download_BCCertificate'])->name('download.document.certificate');
-
-    Route::get('/csp/document/{documentType}/{koCode}', [AdminDocuments::class, 'documents'])->name('csp.document');
-
-    Route::get('/document/agreement', [CSPDocuments::class, 'BC_Agreement'])->name('document.agreement');
-    Route::get('/download/document/agreement', [CSPDocuments::class, 'Download_BC_Agreement'])->name('download.document.agreement');
-
-
+Route::get('/document/agreement', [CSPDocuments::class, 'BC_Agreement'])->name('document.agreement');
+Route::get('/download/document/agreement', [CSPDocuments::class, 'Download_BC_Agreement'])->name('download.document.agreement');
 
 Route::get('/assets/{file}', function ($file) {
     $path = base_path('assets/' . $file);
@@ -121,16 +116,10 @@ Route::prefix('admin')->group(function () {
     Route::post('/bc-ledger/report', [BCLedgerController::class, 'generateReport'])->name('bc-ledger.report');
     Route::get('/bc-ledger/export-pdf', [BCLedgerController::class, 'exportPdf'])->name('bc-ledger.export-pdf');
 
-
-
     // CSP Documents routes
     Route::get('/csp/documents/{id}', [App\Http\Controllers\AdminAuthController::class, 'getCspDocuments']);
-    
-    
+
     Route::get('/csp/certificate/{cspId}/{certificateId}', [App\Http\Controllers\AdminAuthController::class, 'viewCertificate']);
-    
-
-
 
     Route::get('/mis/upload', [MisDataController::class, 'create'])->name('mis.create');
     Route::post('/mis/upload', [MisDataController::class, 'store'])->name('mis.store');
@@ -138,7 +127,6 @@ Route::prefix('admin')->group(function () {
     Route::delete('/mis/{id}', [MisDataController::class, 'destroy'])->name('mis.destroy');
 
     Route::get('/mis/download/{filename}', [MisDataController::class, 'download'])->name('mis.download');
-
 
     Route::get('/csp/document/identity/{koCode}', [AdminDocuments::class, 'BC_IDCard'])->name('csp.document.identity');
     Route::get('/csp/document/certificate/{koCode}', [AdminDocuments::class, 'BCCertificate'])->name('csp.document.certificate');
@@ -149,7 +137,6 @@ Route::prefix('admin')->group(function () {
     Route::get('/csp/agreement/{cspId}', [App\Http\Controllers\AdminAuthController::class, 'viewAgreement']);
 
     Route::post('/updateDocuments', [App\Http\Controllers\AdminDocuments::class, 'updateDocuments'])->name('admin.updateDocuments');
-
 });
 
 // For SubAdmin Auth
@@ -169,22 +156,33 @@ Route::prefix('subadmin')->group(function () {
     Route::get('/records', [SubAdminExcelLogController::class, 'index'])->middleware('auth:subadmin')->name('subadmin.excel.logs');
     Route::delete('/excel/logs/{id}', [SubAdminExcelLogController::class, 'deleteLog'])->middleware('auth:subadmin')->name('subadmin.excel.delete');
 
-
     // BC Ledger routes for subadmin
     Route::get('/bc-ledger', [SubadminBCLedgerController::class, 'index'])->middleware('auth:subadmin')->name('subadmin.bc-ledger.index');
     Route::get('/bc-ledger/report', [SubadminBCLedgerController::class, 'generateReport'])->middleware('auth:subadmin')->name('subadmin.bc-ledger.report');
     Route::get('/bc-ledger/export-pdf', [SubadminBCLedgerController::class, 'exportPdf'])->middleware('auth:subadmin')->name('subadmin.bc-ledger.export-pdf');
 
+    // Handle csp agents
+    Route::get('/registerCSP', [SubadminAuthController::class, 'showRegisterFormCSP'])->middleware('auth:subadmin')->name('subadmin.addCSP');
+    Route::post('/registerCSP', [SubadminAuthController::class, 'registerCSP'])->middleware('auth:subadmin')->name('subadmin.registerCSP');
+
+    Route::get('/csps', [SubadminAuthController::class, 'showCSPList'])->middleware('auth:subadmin')->name('subadmin.csps');
+    Route::post('/deleteCSP', [SubadminAuthController::class, 'deleteCSP'])->middleware('auth:subadmin')->name('subadmin.deleteCSP');
+    Route::get('/editCSP/{id}', [SubadminAuthController::class, 'editCSP'])->middleware('auth:subadmin')->name('subadmin.editCSP');
+    Route::post('/updateCSP', [SubadminAuthController::class, 'updateCSP'])->middleware('auth:subadmin')->name('subadmin.updateCSP');
 
 
-        // Handle csp agents
-        Route::get('/registerCSP', [SubadminAuthController::class, 'showRegisterFormCSP'])->middleware('auth:subadmin')->name('subadmin.addCSP');
-        Route::post('/registerCSP', [SubadminAuthController::class, 'registerCSP'])->middleware('auth:subadmin')->name('subadmin.registerCSP');
-    
-        Route::get('/csps', [SubadminAuthController::class, 'showCSPList'])->middleware('auth:subadmin')->name('subadmin.csps');
-        Route::post('/deleteCSP', [SubadminAuthController::class, 'deleteCSP'])->middleware('auth:subadmin')->name('subadmin.deleteCSP');
-        Route::get('/editCSP/{id}', [SubadminAuthController::class, 'editCSP'])->middleware('auth:subadmin')->name('subadmin.editCSP');
-        Route::post('/updateCSP', [SubadminAuthController::class, 'updateCSP'])->middleware('auth:subadmin')->name('subadmin.updateCSP');
 
+    //handle Documents Route for Sub admin
 
+    Route::get('/csp/documents/{id}', [SubadminDocuments::class, 'getCspDocuments']);
+
+    Route::get('/csp/document/identity/{koCode}', [SubadminDocuments::class, 'BC_IDCard'])->name('csp.document.identity');
+    Route::get('/csp/document/certificate/{koCode}', [SubadminDocuments::class, 'BCCertificate'])->name('csp.document.certificate');
+    Route::get('/csp/document/{documentType}/{koCode}', [SubadminDocuments::class, 'documents'])->name('csp.document');
+
+    Route::post('/uploadAgreement', [App\Http\Controllers\SubadminDocuments::class, 'uploadAgreement'])->name('subadmin.uploadAgreement');
+
+    Route::get('/csp/agreement/{cspId}', [App\Http\Controllers\AdminAuthController::class, 'viewAgreement']);
+
+    Route::post('/updateDocuments', [App\Http\Controllers\SubadminDocuments::class, 'updateDocuments'])->name('subadmin.updateDocuments');
 });
