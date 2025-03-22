@@ -35,6 +35,11 @@
                 <span class="menu-text">Ledger</span>
             </div></a>
 
+            <a href="{{route('admin.mis')}}"><div class="menu-list-item">
+                <span class="menu-icon"><i class="fa-solid fa-circle-info"></i></span>
+                <span class="menu-text">MIS</span>
+            </div></a>
+
             <a href="{{route('admin.csps')}}"><div class="menu-list-item">
                 <span class="menu-icon"><i class="fa-solid fa-user-plus"></i></span>
                 <span class="menu-text">CSP Agents</span>

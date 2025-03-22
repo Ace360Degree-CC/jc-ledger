@@ -233,7 +233,25 @@ body{
     align-items: center;
 }
 
+.login-logo{
+    position:absolute;
+    bottom: calc(100% + 1rem);
+    left: 0;
+    right: 0;
+    margin: auto;
+    width: 100%;
+    text-align: center;
+}
+
+.login-logo img{
+    max-width: 380px;
+    width: 100%;
+    display: block;
+    margin:auto;
+}
+
 .login-box{
+    position: relative;
     max-width: 550px;
     width: 100%;
     padding: 2rem;

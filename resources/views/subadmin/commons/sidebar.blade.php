@@ -30,6 +30,11 @@
                 <span class="menu-text">Records</span>
             </div>    
 
+            <a href="{{route('subadmin.mis')}}"><div class="menu-list-item">
+                <span class="menu-icon"><i class="fa-solid fa-circle-info"></i></span>
+                <span class="menu-text">MIS</span>
+            </div></a>
+
             <a href="{{route('subadmin.bc-ledger.index')}}"><div class="menu-list-item">
                 <span class="menu-icon"><i class="fa-solid fa-file-invoice"></i></span>
                 <span class="menu-text">Ledger</span>

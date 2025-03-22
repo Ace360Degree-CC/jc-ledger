@@ -8,6 +8,7 @@
     <div class="container mx-auto px-2">
         <div class="login-flex-box">
             <div class="login-box">   
+            <div class="login-logo"><img src="{{asset('assets/images/logos/jc-logo.png')}}" /></div>
                 <h2 class="text-center text-4xl font-semibold mb-5">Register</h2>
                 <form method="POST" action="{{ route('register') }}">
                     @csrf
