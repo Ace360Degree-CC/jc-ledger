@@ -30,7 +30,7 @@
                 <span class="menu-text">Records</span>
             </div>    
 
-            <a href="{{route('subadmin.mis.store')}}"><div class="menu-list-item">
+            <a href="{{route('subadmin.mis.index')}}"><div class="menu-list-item">
                 <span class="menu-icon"><i class="fa-solid fa-circle-info"></i></span>
                 <span class="menu-text">MIS</span>
             </div></a>
